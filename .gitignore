@@ -1,0 +1,30 @@
+#Directories
+/build/
+/bin/
+/logs/
+/downloads/
+/config/
+/data/
+/backups/
+
+#Hidden Directories
+.gradle/
+.settings/
+.idea/
+
+#File Extensions
+*.iml
+*.ipr
+*.iws
+*.war
+*.ear
+*.class
+*.classpath
+*.project
+
+#File Types
+hs_err_pid*
+Thumbs.db
+
+#Generated Files
+config.json

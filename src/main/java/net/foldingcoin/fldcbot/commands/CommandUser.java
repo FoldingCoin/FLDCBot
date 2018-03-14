@@ -2,6 +2,7 @@ package net.foldingcoin.fldcbot.commands;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -10,6 +11,7 @@ import net.darkhax.botbase.commands.Command;
 import net.darkhax.botbase.embed.MessageUser;
 import net.darkhax.botbase.utils.MessageUtils;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -58,15 +60,17 @@ public class CommandUser implements Command {
                 found.add(bot.instance.getOurUser());
             }
 
-            else {
+            else if (message.getGuild() != null) {
+
+                final IGuild guild = message.getGuild();
 
                 // Add all users with a similar username.
-                found.addAll(bot.instance.getUsersByName(userParam, true));
+                found.addAll(this.getUsersByName(guild, userParam));
 
                 // If the name is a full number, attempt user id lookup as well.
                 if (!userParam.contains(".") && NumberUtils.isParsable(userParam)) {
 
-                    final IUser user = message.getGuild().getUserByID(Long.parseLong(userParam));
+                    final IUser user = guild.getUserByID(Long.parseLong(userParam));
 
                     if (user != null) {
 
@@ -77,6 +81,12 @@ public class CommandUser implements Command {
         }
 
         return found;
+    }
+
+    // TODO move this to DiscordBotBase lib?
+    private Set<IUser> getUsersByName (IGuild guild, String name) {
+
+        return guild.getUsers().stream().filter(u -> u.getDisplayName(guild).equalsIgnoreCase(name)).collect(Collectors.toSet());
     }
 
     @Override

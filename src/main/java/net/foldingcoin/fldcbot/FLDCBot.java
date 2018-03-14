@@ -2,7 +2,8 @@ package net.foldingcoin.fldcbot;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
-import net.foldingcoin.fldcbot.commands.CommandUser;
+import net.foldingcoin.fldcbot.commands.*;
+import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -26,6 +27,8 @@ public class FLDCBot extends BotBase {
     public void registerCommands (ManagerCommands handler) {
 
         handler.registerCommand("user", new CommandUser());
+        handler.registerCommand("lookup", new CommandLookup());
+    
     }
 
     @Override
@@ -38,6 +41,7 @@ public class FLDCBot extends BotBase {
     public void onSucessfulLogin (IDiscordClient instance) {
 
         // TODO Initialize admin and moderator roles.
+        FLDCStats.init();
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 
 import net.darkhax.botbase.BotBase;
 import net.foldingcoin.fldcbot.BotLauncher;
@@ -71,12 +70,12 @@ public class CoinMarketCap {
         // Downloads the json data and saves it to a file.
         final File downloadFile = bot.downloadFile(coinUrl, saveDir, fileName);
 
-        try (final JsonReader jsonReader = new JsonReader(new FileReader(downloadFile))) {
+        try (final FileReader reader = new FileReader(downloadFile)) {
 
             // Construct CoinInfo array from the json data.
-            final CoinInfo[] info = GSON.fromJson(jsonReader, CoinInfo[].class);
+            final CoinInfo[] info = GSON.fromJson(reader, CoinInfo[].class);
 
-            // Data is recieved as an array, but will only have one element.
+            // Data is received as an array, but will only have one element.
             if (info != null && info.length > 0) {
 
                 return info[0];

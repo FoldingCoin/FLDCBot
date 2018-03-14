@@ -2,7 +2,8 @@ package net.foldingcoin.fldcbot;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
-import net.foldingcoin.fldcbot.commands.*;
+import net.foldingcoin.fldcbot.commands.CommandLookup;
+import net.foldingcoin.fldcbot.commands.CommandUser;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
@@ -28,7 +29,7 @@ public class FLDCBot extends BotBase {
 
         handler.registerCommand("user", new CommandUser());
         handler.registerCommand("lookup", new CommandLookup());
-    
+
     }
 
     @Override

@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group 'net.foldingcoin.fldcbot'
+
+repositories {
+
+    jcenter()
+	
+    maven {
+	
+	    url 'https://maven.mcmoddev.com/'
+	}
+	
+	maven {
+	
+        url  'https://jitpack.io'
+    }
+}
+
+dependencies {
+
+    compile group: 'net.darkhax.discordbotbase', name: 'DiscordBotBase', version:'1.0.7'
+    compile group: 'com.opencsv', name: 'opencsv', version: '3.3'
+    // TODO Add support for JUnit
+}
+
+// TODO add application export settings.

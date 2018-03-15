@@ -22,7 +22,7 @@ dependencies {
 
     compile group: 'net.darkhax.discordbotbase', name: 'DiscordBotBase', version:'1.0.8'
     compile group: 'com.opencsv', name: 'opencsv', version: '3.3'
-    // TODO Add support for JUnit
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 // TODO add application export settings.

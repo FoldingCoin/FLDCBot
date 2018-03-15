@@ -1,6 +1,5 @@
 package net.foldingcoin.fldcbot.commands;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import net.darkhax.botbase.BotBase;
@@ -8,7 +7,6 @@ import net.darkhax.botbase.commands.Command;
 import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import net.foldingcoin.fldcbot.util.fldc.FLDCUser;
-import sun.plugin2.message.Message;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
@@ -27,21 +25,20 @@ public class CommandLookup implements Command {
             final EmbedBuilder embed = new EmbedBuilder();
             final List<FLDCUser> users = FLDCStats.getFutureUsers(key);
 
-            if(users.isEmpty()) {
+            if (users.isEmpty()) {
                 MessageUtils.sendMessage(channel, "No information found for: " + MessageUtils.quote(key) + "!");
             }
-            else if(users.size()>1) {
-                channel.sendMessage("More than 1 (one) user found ("+users.size() +" found), please use the full Folding@Home username!");
+            else if (users.size() > 1) {
+                channel.sendMessage("More than 1 (one) user found (" + users.size() + " found), please use the full Folding@Home username!");
             }
             else {
-                FLDCUser user = users.get(0);
+                final FLDCUser user = users.get(0);
                 final String fahUsername = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
                 embed.withTitle(fahUsername);
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
                 embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
                 embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
-                embed.appendField("F@H Username", fahUsername, false);
                 MessageUtils.sendMessage(channel, embed.build());
             }
         }

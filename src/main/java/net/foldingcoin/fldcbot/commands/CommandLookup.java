@@ -60,7 +60,7 @@ public class CommandLookup implements Command {
                 }
             }
             else {
-                channel.sendMessage("No users found from key: \"" + key + "\"");
+                channel.sendMessage("No users found from key: " + MessageUtils.quote(key));
             }
         }
 

@@ -86,7 +86,7 @@ public class FLDCBot extends BotBase {
             return;
         }
 
-        if (event.getAuthor().getRolesForGuild(event.getGuild()).size() == 0) {
+        if (event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
             final String content = event.getMessage().getContent().toLowerCase();
             if (content.contains("http://") || content.contains("https://") || content.contains("www.") || content.contains("www(dot)")) {
                 event.getMessage().delete();

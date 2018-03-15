@@ -7,13 +7,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.internal.LinkedTreeMap;
 
 import net.foldingcoin.fldcbot.BotLauncher;
 
@@ -48,7 +47,7 @@ public class FLDCStats {
         BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(getFirstSaturday(instance)), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
 
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_PREV_DISTRIBUTION))) {
-            distributionsFuture = getUsers(GSON.fromJson(reader, List.class));
+            distributionsFuture = mapUsers(GSON.fromJson(reader, FLDCUser[].class));
         }
         catch (final IOException e) {
             BotLauncher.LOG.error(FILE_PREV_DISTRIBUTION + " was not found!", e);
@@ -56,7 +55,7 @@ public class FLDCStats {
         // calculates the future points
         futurePoints = totalPoints;
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_CURRENT_DISTRIBUTION))) {
-            distributionsPast = getUsers(GSON.fromJson(reader, List.class));
+            distributionsPast = mapUsers(GSON.fromJson(reader, FLDCUser[].class));
         }
         catch (final IOException e) {
             BotLauncher.LOG.error(FILE_CURRENT_DISTRIBUTION + " was not found!", e);
@@ -80,28 +79,26 @@ public class FLDCStats {
     }
 
     /**
-     * Processes users from the JSON files, users' who's "token" isn't "all" or "fldc" are
-     * ignored.
+     * Maps all of the users to a name so they can be looked up at a later time. This method is
+     * also responsible for updating {@link #totalPoints}.
      *
-     * @param users List of json objects
-     *
-     * @return Map of <Name, FLDC> containing all the users from the given list.
+     * @param users An array of users to account for.
+     * @return A map of all users mapped to their name.
      */
-    private static Map<String, FLDCUser> getUsers (List<LinkedTreeMap> users) {
+    private static Map<String, FLDCUser> mapUsers (FLDCUser[] users) {
 
-        final Map<String, FLDCUser> map = new TreeMap<>();
-        for (final LinkedTreeMap ent : users) {
-            final FLDCUser user = new FLDCUser();
-            user.setId(Long.parseLong((String) ent.get("id")));
-            user.setName(((String) ent.get("name")).toLowerCase());
-            user.setToken((String) ent.get("token"));
-            user.setAddress((String) ent.get("address"));
-            user.setNewCredit(Long.parseLong((String) ent.get("newcredit")));
+        final Map<String, FLDCUser> map = new HashMap<>();
+
+        for (final FLDCUser user : users) {
+
+            // Currently only users who are using all or fldc are tracked.
             if (user.getToken().equalsIgnoreCase("all") || user.getToken().equalsIgnoreCase("fldc")) {
+
                 totalPoints += user.getNewCredit();
                 map.put(user.getName(), user);
             }
         }
+
         return map;
     }
 

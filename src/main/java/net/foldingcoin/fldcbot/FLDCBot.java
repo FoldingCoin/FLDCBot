@@ -44,7 +44,7 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("lookup", new CommandLookup());
         handler.registerCommand("wallet", new CommandWallet());
         handler.registerCommand("browser", new CommandInfo("The Folding Browser", "The folding browser is a tool for making the creation and management of folding accounts easier. You can find more info and downloads " + MessageUtils.makeHyperlink("here", "https://github.com/Hou5e/FoldingBrowser/releases") + "."));
-
+        handler.registerCommand("fah", new CommandInfo("Folding @ Home", "The Stanford Folding At Home client allows users to contribute their idle computation power to medical research. You can find more info and downloads " + MessageUtils.makeHyperlink("here", "http://folding.stanford.edu") + "."));
     }
 
     @Override

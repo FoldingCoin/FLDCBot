@@ -2,6 +2,8 @@ package net.foldingcoin.fldcbot.commands;
 
 import java.util.Map.Entry;
 
+import com.vdurmont.emoji.EmojiManager;
+
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.Command;
 import net.darkhax.botbase.utils.MessageUtils;
@@ -24,6 +26,7 @@ public class CommandHelp implements Command {
         }
 
         MessageUtils.sendPrivateMessage(bot.instance, message.getAuthor(), MessageUtils.makeMultiCodeBlock(joiner.toString()));
+        message.addReaction(EmojiManager.getForAlias("white_check_mark"));
     }
 
     @Override

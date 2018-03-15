@@ -3,10 +3,8 @@ package net.foldingcoin.fldcbot.util.fldc;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.foldingcoin.fldcbot.BotLauncher;
+import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 
 public class FLDCStats {
 
@@ -40,11 +39,11 @@ public class FLDCStats {
      */
     public static void init () {
 
-        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        final Calendar instance = Calendar.getInstance();
+        final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         // Downloads the files
-        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(instance.getTime()), FLDC_DIR, FILE_PREV_DISTRIBUTION);
-        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(getFirstSaturday(instance)), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now()), FLDC_DIR, FILE_PREV_DISTRIBUTION);
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(DistributionUtils.getLastDistribution()), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
 
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_PREV_DISTRIBUTION))) {
             distributionsFuture = mapUsers(GSON.fromJson(reader, FLDCUser[].class));
@@ -100,28 +99,6 @@ public class FLDCStats {
         }
 
         return map;
-    }
-
-    /**
-     * Gets the date of the first Saturday of the month, if the month first Saturday has
-     * passed, the first Saturday of the next month will be returned.
-     *
-     * @param calendar Current date
-     *
-     * @return The first Saturday of the month.
-     */
-    public static Date getFirstSaturday (Calendar calendar) {
-
-        final Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-        cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, 1);
-        cal.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
-        cal.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
-        if (cal.get(Calendar.DATE) < calendar.get(Calendar.DATE)) {
-            cal.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1 >= Calendar.JANUARY ? calendar.get(Calendar.MONTH) - 1 : Calendar.DECEMBER);
-            return getFirstSaturday(cal);
-        }
-        return cal.getTime();
     }
 
     public static FLDCUser getFutureUser (String key) {

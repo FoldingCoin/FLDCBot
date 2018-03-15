@@ -94,7 +94,11 @@ public class FLDCStats {
             if (user.getToken().equalsIgnoreCase("all") || user.getToken().equalsIgnoreCase("fldc")) {
 
                 totalPoints += user.getNewCredit();
-                map.put(user.getName(), user);
+                String format = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
+                if(map.containsKey(format)){
+                    duplicates.add(user);
+                }
+                map.put(format, user);
             }
         }
 
@@ -118,20 +122,49 @@ public class FLDCStats {
 
     public static FLDCUser getUser (Map<String, FLDCUser> map, String key) {
 
-        if (map.containsKey(key)) {
-            return map.get(key);
-        }
-        else {
             for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
-                if (entry.getValue().getAddress().equals(key)) {
+                if(entry.getKey().startsWith(key)){
+                    return entry.getValue();
+                }
+                else if (entry.getValue().getAddress().equals(key)) {
                     return entry.getValue();
                 }
                 else if (key.equalsIgnoreCase(entry.getValue().getId() + "")) {
                     return entry.getValue();
                 }
-            }
         }
         return null;
     }
-
+    
+    public static List<FLDCUser> getFutureUsers (String key) {
+        
+        return getUsers(distributionsFuture, key);
+    }
+    
+    public static List<FLDCUser> getPastUsers (String key) {
+        
+        return getUsers(distributionsPast, key);
+    }
+    
+    public static List<FLDCUser> getDifferenceUsers (String key) {
+        
+        return getUsers(distributionsDifference, key);
+    }
+    
+    public static List<FLDCUser> getUsers (Map<String, FLDCUser> map, String key) {
+        List<FLDCUser> users = new LinkedList<>();
+        for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
+            if(entry.getKey().startsWith(key)){
+                users.add(entry.getValue());
+            }
+            else if (entry.getValue().getAddress().equals(key)) {
+                users.add(entry.getValue());
+            }
+            else if (key.equalsIgnoreCase(entry.getValue().getId() + "")) {
+                users.add(entry.getValue());
+            }
+        }
+        return users;
+    }
+    
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
+import net.darkhax.botbase.lib.ScheduledTimer;
 import net.foldingcoin.fldcbot.commands.CommandLookup;
 import net.foldingcoin.fldcbot.commands.CommandUser;
 import net.foldingcoin.fldcbot.commands.CommandWallet;
@@ -23,11 +24,13 @@ import sx.blah.discord.util.EmbedBuilder;
 public class FLDCBot extends BotBase {
 
     private final Configuration config;
+    private final ScheduledTimer timer;
 
     public FLDCBot (String botName, Configuration config) {
 
         super(botName, config.getDiscordToken(), config.getCommandKey(), BotLauncher.LOG);
         this.config = config;
+        this.timer = new ScheduledTimer();
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.darkhax.botbase.commands.Command;
 import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import net.foldingcoin.fldcbot.util.fldc.FLDCUser;
+import sun.plugin2.message.Message;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
@@ -23,47 +24,27 @@ public class CommandLookup implements Command {
         // This command requires at least one parameter.
         if (params.length >= 1) {
             final String key = params[0];
-            final List<EmbedBuilder> embeds = new LinkedList<>();
-            EmbedBuilder embed = new EmbedBuilder();
-            embeds.add(embed);
+            final EmbedBuilder embed = new EmbedBuilder();
             final List<FLDCUser> users = FLDCStats.getFutureUsers(key);
 
-            if (!users.isEmpty()) {
-
-                final boolean multiple = users.size() > 1;
-                for (final FLDCUser user : users) {
-                    final String fahUsername = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
-                    if (embed.getFieldCount() == 0 || embed.getFieldCount() >= 19) {
-
-                        if (embed.getFieldCount() > 0) {
-                            embeds.add(embed);
-                            embed = new EmbedBuilder();
-                        }
-                        if (!multiple) {
-                            embed.withTitle(fahUsername);
-                        }
-                        else {
-                            embed.withTitle(key);
-                        }
-                        embed.withColor(message.getAuthor().getColorForGuild(channel.getGuild()));
-                    }
-
-                    embed.appendField("Team Rank", user.getId() + "", true);
-                    embed.appendField("Token", user.getToken() + "", true);
-                    embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
-                    embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
-                    embed.appendField("F@H Username", fahUsername, false);
-
-                }
-                for (final EmbedBuilder builder : embeds) {
-                    channel.sendMessage(builder.build());
-                }
+            if(users.isEmpty()) {
+                MessageUtils.sendMessage(channel, "No information found for: " + MessageUtils.quote(key) + "!");
+            }
+            else if(users.size()>1) {
+                channel.sendMessage("More than 1 (one) user found ("+users.size() +" found), please use the full Folding@Home username!");
             }
             else {
-                channel.sendMessage("No users found from key: \"" + key + "\"");
+                FLDCUser user = users.get(0);
+                final String fahUsername = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
+                embed.withTitle(fahUsername);
+                embed.appendField("Team Rank", user.getId() + "", true);
+                embed.appendField("Token", user.getToken() + "", true);
+                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
+                embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
+                embed.appendField("F@H Username", fahUsername, false);
+                MessageUtils.sendMessage(channel, embed.build());
             }
         }
-
     }
 
     @Override

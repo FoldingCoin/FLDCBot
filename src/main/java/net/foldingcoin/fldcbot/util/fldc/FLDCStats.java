@@ -5,7 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -116,39 +120,40 @@ public class FLDCStats {
 
     public static FLDCUser getUser (Map<String, FLDCUser> map, String key) {
 
-            for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
-                if(entry.getKey().startsWith(key)){
-                    return entry.getValue();
-                }
-                else if (entry.getValue().getAddress().equals(key)) {
-                    return entry.getValue();
-                }
-                else if (key.equalsIgnoreCase(entry.getValue().getId() + "")) {
-                    return entry.getValue();
-                }
+        for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
+            if (entry.getKey().startsWith(key)) {
+                return entry.getValue();
+            }
+            else if (entry.getValue().getAddress().equals(key)) {
+                return entry.getValue();
+            }
+            else if (key.equalsIgnoreCase(entry.getValue().getId() + "")) {
+                return entry.getValue();
+            }
         }
         return null;
     }
-    
+
     public static List<FLDCUser> getFutureUsers (String key) {
-        
+
         return getUsers(distributionsFuture, key);
     }
-    
+
     public static List<FLDCUser> getPastUsers (String key) {
-        
+
         return getUsers(distributionsPast, key);
     }
-    
+
     public static List<FLDCUser> getDifferenceUsers (String key) {
-        
+
         return getUsers(distributionsDifference, key);
     }
-    
+
     public static List<FLDCUser> getUsers (Map<String, FLDCUser> map, String key) {
-        List<FLDCUser> users = new LinkedList<>();
+
+        final List<FLDCUser> users = new LinkedList<>();
         for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
-            if(entry.getKey().startsWith(key)){
+            if (entry.getKey().startsWith(key)) {
                 users.add(entry.getValue());
             }
             else if (entry.getValue().getAddress().equals(key)) {
@@ -160,5 +165,5 @@ public class FLDCStats {
         }
         return users;
     }
-    
+
 }

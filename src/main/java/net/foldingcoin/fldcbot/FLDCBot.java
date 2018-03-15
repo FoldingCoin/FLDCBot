@@ -1,17 +1,19 @@
 package net.foldingcoin.fldcbot;
 
+import java.awt.Color;
+
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
-import net.foldingcoin.fldcbot.commands.*;
+import net.foldingcoin.fldcbot.commands.CommandLookup;
+import net.foldingcoin.fldcbot.commands.CommandUser;
+import net.foldingcoin.fldcbot.commands.CommandWallet;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
-
-import java.awt.*;
-
 
 /**
  * The main bot instance, used to communicate with Discord and the various bot systems.
@@ -34,7 +36,7 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("user", new CommandUser());
         handler.registerCommand("lookup", new CommandLookup());
         handler.registerCommand("wallet", new CommandWallet());
-    
+
     }
 
     @Override
@@ -70,7 +72,7 @@ public class FLDCBot extends BotBase {
         // TODO load up the admin info
         return false;
     }
-    
+
     /**
      * Called by the event dispatcher when a message is sent to a channel that we can see.
      *
@@ -78,28 +80,29 @@ public class FLDCBot extends BotBase {
      */
     @EventSubscriber
     public void onMessageRecieved (MessageReceivedEvent event) {
-        //TODO remove this limit
-        if(!event.getChannel().getName().toLowerCase().equalsIgnoreCase("bot-testing")){
+
+        // TODO remove this limit
+        if (!event.getChannel().getName().toLowerCase().equalsIgnoreCase("bot-testing")) {
             return;
         }
-        
-        if(event.getAuthor().getRolesForGuild(event.getGuild()).size()==0) {
-            String content = event.getMessage().getContent().toLowerCase();
-            if(content.contains("http://") || content.contains("https://") || content.contains("www.") || content.contains("www(dot)")) {
+
+        if (event.getAuthor().getRolesForGuild(event.getGuild()).size() == 0) {
+            final String content = event.getMessage().getContent().toLowerCase();
+            if (content.contains("http://") || content.contains("https://") || content.contains("www.") || content.contains("www(dot)")) {
                 event.getMessage().delete();
                 event.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
-                //Logging purposes
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.withTitle( " tried to send a link in: " + event.getChannel().getName());
+                // Logging purposes
+                final EmbedBuilder builder = new EmbedBuilder();
+                builder.withTitle(" tried to send a link in: " + event.getChannel().getName());
                 builder.withColor(Color.red);
                 builder.withDesc("Message contents:\n\n" + content);
                 builder.withTimestamp(event.getMessage().getTimestamp());
                 builder.withThumbnail(event.getAuthor().getAvatarURL());
                 builder.withAuthorName(event.getAuthor().getName());
-                //TODO change this channel name
+                // TODO change this channel name
                 event.getGuild().getChannelsByName("bot-testing").get(0).sendMessage(builder.build());
             }
         }
-        
+
     }
 }

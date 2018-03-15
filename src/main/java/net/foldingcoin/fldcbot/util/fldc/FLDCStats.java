@@ -27,14 +27,14 @@ public class FLDCStats {
     private static final String FILE_PREV_DISTRIBUTION = "distribution_future.json";
     private static final String FILE_CURRENT_DISTRIBUTION = "distribution_last.json";
 
-    public static Map<String, FLDCUser> DISTRIBUTION_FUTURE = new TreeMap<>();
-    public static Map<String, FLDCUser> DISTRIBUTION_PAST = new TreeMap<>();
-    public static Map<String, FLDCUser> DISTRIBUTION_DIFFERENCE = new TreeMap<>();
+    public static Map<String, FLDCUser> distributionsFuture = new TreeMap<>();
+    public static Map<String, FLDCUser> distributionsPast = new TreeMap<>();
+    public static Map<String, FLDCUser> distributionsDifference = new TreeMap<>();
 
-    public static long POINTS_TOTAL = 0;
-    public static long POINTS_DIFFERENCE = 0;
-    public static long POINTS_PAST = 0;
-    public static long POINTS_FUTURE = 0;
+    public static long totalPoints = 0;
+    public static long pastPoints = 0;
+    public static long futurePoints = 0;
+    public static long differencePoints = 0;
 
     /**
      * Downloads the unpaid FLDC data and collects it for use.
@@ -48,33 +48,33 @@ public class FLDCStats {
         BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(getFirstSaturday(instance)), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
 
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_PREV_DISTRIBUTION))) {
-            DISTRIBUTION_FUTURE = getUsers(GSON.fromJson(reader, List.class));
+            distributionsFuture = getUsers(GSON.fromJson(reader, List.class));
         }
         catch (final IOException e) {
             BotLauncher.LOG.error(FILE_PREV_DISTRIBUTION + " was not found!", e);
         }
         // calculates the future points
-        POINTS_FUTURE = POINTS_TOTAL;
+        futurePoints = totalPoints;
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_CURRENT_DISTRIBUTION))) {
-            DISTRIBUTION_PAST = getUsers(GSON.fromJson(reader, List.class));
+            distributionsPast = getUsers(GSON.fromJson(reader, List.class));
         }
         catch (final IOException e) {
             BotLauncher.LOG.error(FILE_CURRENT_DISTRIBUTION + " was not found!", e);
         }
 
         // Calculates the past points
-        POINTS_PAST = POINTS_TOTAL - POINTS_FUTURE;
-        POINTS_DIFFERENCE = POINTS_FUTURE - POINTS_PAST;
+        pastPoints = totalPoints - futurePoints;
+        differencePoints = futurePoints - pastPoints;
 
         // Loops over the users and creates a new user that has the difference between the old
         // and new user.
-        for (final String key : DISTRIBUTION_FUTURE.keySet()) {
-            final FLDCUser user_future = DISTRIBUTION_FUTURE.get(key);
-            final FLDCUser user_past = DISTRIBUTION_PAST.get(key);
+        for (final String key : distributionsFuture.keySet()) {
+            final FLDCUser user_future = distributionsFuture.get(key);
+            final FLDCUser user_past = distributionsPast.get(key);
             // There may not always be a past user
             final long oldCred = user_past != null ? user_past.getNewCredit() : 0;
             final FLDCUser user_diff = new FLDCUser(user_future.getId(), user_future.getName(), user_future.getToken(), user_future.getAddress(), user_future.getNewCredit() - oldCred);
-            DISTRIBUTION_DIFFERENCE.put(key, user_diff);
+            distributionsDifference.put(key, user_diff);
         }
 
     }
@@ -98,7 +98,7 @@ public class FLDCStats {
             user.setAddress((String) ent.get("address"));
             user.setNewCredit(Long.parseLong((String) ent.get("newcredit")));
             if (user.getToken().equalsIgnoreCase("all") || user.getToken().equalsIgnoreCase("fldc")) {
-                POINTS_TOTAL += user.getNewCredit();
+                totalPoints += user.getNewCredit();
                 map.put(user.getName(), user);
             }
         }
@@ -129,17 +129,17 @@ public class FLDCStats {
 
     public static FLDCUser getFutureUser (String key) {
 
-        return getUser(DISTRIBUTION_FUTURE, key);
+        return getUser(distributionsFuture, key);
     }
 
     public static FLDCUser getPastUser (String key) {
 
-        return getUser(DISTRIBUTION_PAST, key);
+        return getUser(distributionsPast, key);
     }
 
     public static FLDCUser getDifferenceUser (String key) {
 
-        return getUser(DISTRIBUTION_DIFFERENCE, key);
+        return getUser(distributionsDifference, key);
     }
 
     public static FLDCUser getUser (Map<String, FLDCUser> map, String key) {

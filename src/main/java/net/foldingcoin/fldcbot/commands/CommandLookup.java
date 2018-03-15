@@ -25,7 +25,7 @@ public class CommandLookup implements Command {
                 embed.withTitle(String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress()));
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
-                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(key).getNewCredit() / FLDCStats.POINTS_DIFFERENCE * 7750000) + "", true);
+                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(key).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
                 embed.appendField("Address", user.getAddress() + "", false);
 
                 embed.withColor(message.getAuthor().getColorForGuild(channel.getGuild()));

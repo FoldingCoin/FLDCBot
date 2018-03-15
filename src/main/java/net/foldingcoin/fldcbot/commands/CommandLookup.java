@@ -2,6 +2,7 @@ package net.foldingcoin.fldcbot.commands;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.Command;
+import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import net.foldingcoin.fldcbot.util.fldc.FLDCUser;
 import sx.blah.discord.handle.obj.IChannel;
@@ -22,11 +23,12 @@ public class CommandLookup implements Command {
             final EmbedBuilder embed = new EmbedBuilder();
             final FLDCUser user = FLDCStats.getFutureUser(key);
             if (user != null) {
-                embed.withTitle(String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress()));
+                String fahUsername = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
+                embed.withTitle(fahUsername);
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
                 embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(key).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
-                embed.appendField("Address", user.getAddress() + "", false);
+                embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(),"http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username="+fahUsername), false);
 
                 embed.withColor(message.getAuthor().getColorForGuild(channel.getGuild()));
                 channel.sendMessage(embed.build());

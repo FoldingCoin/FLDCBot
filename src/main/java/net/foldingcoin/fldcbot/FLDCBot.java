@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
+import net.darkhax.botbase.utils.MessageUtils;
+import net.foldingcoin.fldcbot.commands.CommandInfo;
 import net.foldingcoin.fldcbot.commands.CommandLookup;
 import net.foldingcoin.fldcbot.commands.CommandUser;
 import net.foldingcoin.fldcbot.commands.CommandWallet;
@@ -41,6 +43,7 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("user", new CommandUser());
         handler.registerCommand("lookup", new CommandLookup());
         handler.registerCommand("wallet", new CommandWallet());
+        handler.registerCommand("browser", new CommandInfo("The Folding Browser", "The folding browser is a tool for making the creation and management of folding accounts easier. You can find more info and downloads " + MessageUtils.makeHyperlink("here", "https://github.com/Hou5e/FoldingBrowser/releases") + "."));
 
     }
 

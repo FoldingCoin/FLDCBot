@@ -5,9 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -94,11 +92,7 @@ public class FLDCStats {
             if (user.getToken().equalsIgnoreCase("all") || user.getToken().equalsIgnoreCase("fldc")) {
 
                 totalPoints += user.getNewCredit();
-                String format = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
-                if(map.containsKey(format)){
-                    duplicates.add(user);
-                }
-                map.put(format, user);
+                map.put(String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress()), user);
             }
         }
 

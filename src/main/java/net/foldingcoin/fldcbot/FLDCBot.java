@@ -1,6 +1,7 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
+import java.util.concurrent.TimeUnit;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
@@ -8,6 +9,7 @@ import net.darkhax.botbase.lib.ScheduledTimer;
 import net.foldingcoin.fldcbot.commands.CommandLookup;
 import net.foldingcoin.fldcbot.commands.CommandUser;
 import net.foldingcoin.fldcbot.commands.CommandWallet;
+import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -51,7 +53,7 @@ public class FLDCBot extends BotBase {
     @Override
     public void onSucessfulLogin (IDiscordClient instance) {
 
-        // TODO Initialize admin and moderator roles.
+        this.timer.scheduleAndRun(TimeUnit.MINUTES.toMillis(1), StatusHandler::updateStatusMessage);
         FLDCStats.init();
     }
 

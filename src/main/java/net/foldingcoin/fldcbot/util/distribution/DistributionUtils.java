@@ -3,11 +3,17 @@ package net.foldingcoin.fldcbot.util.distribution;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
 public class DistributionUtils {
 
     // TODO add their time zone as constant
+
+    public static long getDaysToNextDistribution () {
+
+        return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution());
+    }
 
     public static LocalDate getLastDistribution () {
 

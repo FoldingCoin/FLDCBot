@@ -9,9 +9,19 @@ public class DistributionUtils {
 
     // TODO add their time zone as constant
 
+    public static LocalDate getLastDistribution () {
+
+        return getDistribution(LocalDate.now(), false);
+    }
+
     public static LocalDate getLastDistribution (LocalDate currentDay) {
 
         return getDistribution(currentDay, false);
+    }
+
+    public static LocalDate getNextDistribution () {
+
+        return getDistribution(LocalDate.now(), true);
     }
 
     public static LocalDate getNextDistribution (LocalDate currentDay) {

@@ -97,16 +97,8 @@ public class FLDCStats {
     }
 
     
-    public static long getTeamPPD(){
-        long ppd = 0;
-        for (final String key : distributionsFuture.keySet()) {
-            final FLDCUser user_future = distributionsFuture.get(key);
-            final FLDCUser user_past = distributionsYesterday.get(key);
-            // There may not always be a past user
-            final long oldCred = user_past != null ? user_past.getNewCredit() : 0;
-            ppd += user_future.getNewCredit() - oldCred;
-        }
-        return ppd;
+    public static long getTeamPPD() {
+        return futurePoints - yesterdayPoints;
     }
     /**
      * Maps all of the users to a name so they can be looked up at a later time. This method is

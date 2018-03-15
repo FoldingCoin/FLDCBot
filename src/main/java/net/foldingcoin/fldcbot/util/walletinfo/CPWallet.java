@@ -10,9 +10,11 @@ public class CPWallet {
     @SerializedName("address")
     @Expose
     private String address;
+
     @SerializedName("data")
     @Expose
-    private final List<Data> data = null;
+    private List<Data> data;
+
     @SerializedName("total")
     @Expose
     private long total;

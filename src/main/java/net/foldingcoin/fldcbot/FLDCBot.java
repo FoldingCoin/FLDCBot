@@ -1,7 +1,6 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
-import java.util.concurrent.TimeUnit;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
@@ -58,7 +57,7 @@ public class FLDCBot extends BotBase {
     @Override
     public void onSucessfulLogin (IDiscordClient instance) {
 
-        this.timer.scheduleAndRun(TimeUnit.MINUTES.toMillis(1), StatusHandler::updateStatusMessage);
+        this.timer.scheduleRepeating(0, 60000, StatusHandler::updateStatusMessage);
         FLDCStats.init();
     }
 

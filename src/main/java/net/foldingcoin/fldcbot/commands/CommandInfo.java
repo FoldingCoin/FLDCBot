@@ -9,8 +9,8 @@ import sx.blah.discord.util.EmbedBuilder;
 
 public class CommandInfo implements Command {
 
-    private final EmbedBuilder builder;
-    private final String description;
+    protected final EmbedBuilder builder;
+    protected final String description;
 
     public CommandInfo (String title, String body) {
 

@@ -6,11 +6,7 @@ import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
 import net.darkhax.botbase.utils.MessageUtils;
-import net.foldingcoin.fldcbot.commands.CommandHelp;
-import net.foldingcoin.fldcbot.commands.CommandInfo;
-import net.foldingcoin.fldcbot.commands.CommandLookup;
-import net.foldingcoin.fldcbot.commands.CommandUser;
-import net.foldingcoin.fldcbot.commands.CommandWallet;
+import net.foldingcoin.fldcbot.commands.*;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
@@ -48,6 +44,8 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("fah", new CommandInfo("Folding at Home", "The Stanford Folding At Home client allows users to contribute their idle computation power to medical research. You can find more info and downloads " + MessageUtils.makeHyperlink("here", "http://folding.stanford.edu") + "."));
         handler.registerCommand("nacl", new CommandInfo("Web Folding Client", "The web client allows you to fold from your internet browser. While the folding browser will not earn as many points, it is faster at completing work units. You can try it out " + MessageUtils.makeHyperlink("here", "http://fahwebx.stanford.edu/nacl/") + "."));
         handler.registerCommand("market", new CommandInfo("FLDC Coin Market Cap", "Coin Market Cap has info about many crypto currencies. You can find info about FoldingCoin such as the price, volume, and total supply " + MessageUtils.makeHyperlink("here", "https://coinmarketcap.com/currencies/foldingcoin") + "."));
+        handler.registerCommand("ppd", new CommandPPD("FLDC PPD", "The current FLDC PPD is: "));
+    
     }
 
     @Override

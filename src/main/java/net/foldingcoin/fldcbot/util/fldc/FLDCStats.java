@@ -3,7 +3,7 @@ package net.foldingcoin.fldcbot.util.fldc;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,16 +26,23 @@ public class FLDCStats {
     private static final File FLDC_DIR = new File(BotLauncher.DATA_DIR, "fldc");
     private static final String FILE_PREV_DISTRIBUTION = "distribution_future.json";
     private static final String FILE_CURRENT_DISTRIBUTION = "distribution_last.json";
-
+    private static final String FILE_YESTERDAY_DISTRIBUTION = "distribution_yesterday.json";
+    
+    
     public static Map<String, FLDCUser> distributionsFuture = new TreeMap<>();
     public static Map<String, FLDCUser> distributionsPast = new TreeMap<>();
+    public static Map<String, FLDCUser> distributionsYesterday = new TreeMap<>();
     public static Map<String, FLDCUser> distributionsDifference = new TreeMap<>();
-
+    
+    
+    
     public static long totalPoints = 0;
     public static long pastPoints = 0;
     public static long futurePoints = 0;
     public static long differencePoints = 0;
-
+    public static long yesterdayPoints= 0;
+    
+    
     /**
      * Downloads the unpaid FLDC data and collects it for use.
      */
@@ -44,9 +51,19 @@ public class FLDCStats {
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Downloads the files
-        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now()), FLDC_DIR, FILE_PREV_DISTRIBUTION);
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now(ZoneId.of("America/Los_Angeles"))), FLDC_DIR, FILE_PREV_DISTRIBUTION);
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now(ZoneId.of("America/Los_Angeles")).minusDays(1)), FLDC_DIR, FILE_YESTERDAY_DISTRIBUTION);
         BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(DistributionUtils.getLastDistribution()), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
-
+    
+        try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_YESTERDAY_DISTRIBUTION))) {
+            distributionsYesterday = mapUsers(GSON.fromJson(reader, FLDCUser[].class));
+        }
+        catch (final IOException e) {
+            BotLauncher.LOG.error(FILE_YESTERDAY_DISTRIBUTION + " was not found!", e);
+        }
+        yesterdayPoints = totalPoints;
+        totalPoints = 0;
+    
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_PREV_DISTRIBUTION))) {
             distributionsFuture = mapUsers(GSON.fromJson(reader, FLDCUser[].class));
         }
@@ -79,6 +96,18 @@ public class FLDCStats {
 
     }
 
+    
+    public static long getTeamPPD(){
+        long ppd = 0;
+        for (final String key : distributionsFuture.keySet()) {
+            final FLDCUser user_future = distributionsFuture.get(key);
+            final FLDCUser user_past = distributionsYesterday.get(key);
+            // There may not always be a past user
+            final long oldCred = user_past != null ? user_past.getNewCredit() : 0;
+            ppd += user_future.getNewCredit() - oldCred;
+        }
+        return ppd;
+    }
     /**
      * Maps all of the users to a name so they can be looked up at a later time. This method is
      * also responsible for updating {@link #totalPoints}.

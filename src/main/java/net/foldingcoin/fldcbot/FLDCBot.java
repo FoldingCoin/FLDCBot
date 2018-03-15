@@ -2,16 +2,16 @@ package net.foldingcoin.fldcbot;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
-import net.foldingcoin.fldcbot.commands.CommandLookup;
-import net.foldingcoin.fldcbot.commands.CommandUser;
+import net.foldingcoin.fldcbot.commands.*;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
+
+import java.awt.*;
+
 
 /**
  * The main bot instance, used to communicate with Discord and the various bot systems.
@@ -33,7 +33,8 @@ public class FLDCBot extends BotBase {
 
         handler.registerCommand("user", new CommandUser());
         handler.registerCommand("lookup", new CommandLookup());
-
+        handler.registerCommand("wallet", new CommandWallet());
+    
     }
 
     @Override

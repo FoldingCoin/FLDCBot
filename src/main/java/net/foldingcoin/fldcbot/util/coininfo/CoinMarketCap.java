@@ -1,4 +1,4 @@
-package net.foldingcoin.fldcbot.util;
+package net.foldingcoin.fldcbot.util.coininfo;
 
 import java.io.File;
 import java.io.FileReader;

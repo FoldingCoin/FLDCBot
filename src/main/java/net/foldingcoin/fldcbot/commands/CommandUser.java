@@ -23,7 +23,7 @@ public class CommandUser implements Command {
     public void processCommand (BotBase bot, IChannel channel, IMessage message, String[] params) {
 
         // This command requires a guild to work, and at least one parameter.
-        if (params.length >= 1 && channel.getGuild() != null) {
+        if (params.length >= 1 && !channel.isPrivate()) {
 
             // List of all the users that were found for the input.
             final Set<IUser> users = this.getUsers(bot, message, params);
@@ -42,6 +42,10 @@ public class CommandUser implements Command {
                 embed.withColor(user.getColorForGuild(channel.getGuild()));
                 bot.sendMessage(channel, embed.build());
             }
+        }else if(channel.isPrivate()){
+            bot.sendMessage(channel, "Sorry, this command can only be used in a server!");
+        }else{
+            bot.sendMessage(channel, "This bot requires an argument!");
         }
     }
 

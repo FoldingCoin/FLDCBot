@@ -114,7 +114,7 @@ public class FLDCBot extends BotBase {
         if(event.getMessage().getContent().startsWith(config.getCommandKey())){
             return;
         }
-        if (!event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
+        if (event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
             final String content = event.getMessage().getContent().toLowerCase();
             for(String s : content.split(" ")) {
                 boolean isUrl = false;

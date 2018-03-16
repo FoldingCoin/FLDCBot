@@ -46,6 +46,13 @@ public class CommandUser implements Command {
         // Set of users allows for multiple users to be returned.
         final Set<IUser> found = new HashSet<>();
 
+        // If the message doesn't mention @Everyone or @Here, grab all users.
+        if (!message.mentionsEveryone() && !message.mentionsHere()) {
+
+            found.addAll(message.getMentions());
+        }
+
+        // Attempts to parse input for valid user messages.
         for (final String userParam : users) {
 
             // Allows users to use 'me' to refer to their own info.

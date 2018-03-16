@@ -1,6 +1,8 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
@@ -10,8 +12,10 @@ import net.foldingcoin.fldcbot.commands.CommandHelp;
 import net.foldingcoin.fldcbot.commands.CommandInfo;
 import net.foldingcoin.fldcbot.commands.CommandLookup;
 import net.foldingcoin.fldcbot.commands.CommandPPD;
+import net.foldingcoin.fldcbot.commands.CommandReload;
 import net.foldingcoin.fldcbot.commands.CommandUser;
 import net.foldingcoin.fldcbot.commands.CommandWallet;
+import net.foldingcoin.fldcbot.handler.IReloadable;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
@@ -31,6 +35,7 @@ public class FLDCBot extends BotBase {
 
     private final Configuration config;
     private final ScheduledTimer timer;
+    private final List<IReloadable> reloadListeners;
 
     private IRole roleAdmin;
     private IRole roleTeamFLDC;
@@ -40,12 +45,14 @@ public class FLDCBot extends BotBase {
         super(botName, config.getDiscordToken(), config.getCommandKey(), BotLauncher.LOG);
         this.config = config;
         this.timer = new ScheduledTimer();
+        this.reloadListeners = new ArrayList<>();
     }
 
     @Override
     public void registerCommands (ManagerCommands handler) {
 
         handler.registerCommand("help", new CommandHelp());
+        handler.registerCommand("reload", new CommandReload());
         handler.registerCommand("user", new CommandUser());
         handler.registerCommand("lookup", new CommandLookup());
         handler.registerCommand("wallet", new CommandWallet());
@@ -54,7 +61,6 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("nacl", new CommandInfo("Web Folding Client", "The web client allows you to fold from your internet browser. While the folding browser will not earn as many points, it is faster at completing work units. You can try it out " + MessageUtils.makeHyperlink("here", "http://fahwebx.stanford.edu/nacl/") + "."));
         handler.registerCommand("market", new CommandInfo("FLDC Coin Market Cap", "Coin Market Cap has info about many crypto currencies. You can find info about FoldingCoin such as the price, volume, and total supply " + MessageUtils.makeHyperlink("here", "https://coinmarketcap.com/currencies/foldingcoin") + "."));
         handler.registerCommand("ppd", new CommandPPD("FLDC PPD", "The current FLDC PPD is: "));
-
     }
 
     @Override
@@ -78,8 +84,8 @@ public class FLDCBot extends BotBase {
     @Override
     public void reload () {
 
-        // TODO This will be used in the future.
         super.reload();
+        this.reloadListeners.forEach(listener -> listener.onReload(this));
     }
 
     @Override

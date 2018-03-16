@@ -29,7 +29,12 @@ public class CommandUser implements Command {
             // List of all the users that were found for the input.
             final Set<IUser> users = this.getUsers(bot, message, params);
 
-            // TODO send message when no users are found.
+            // Checks if no users were found, and gives a warning if it was.
+            if (users.isEmpty()) {
+
+                MessageUtils.sendMessage(channel, "No users were found for your request.");
+                return;
+            }
 
             // Iterate through all users and print their info to chat.
             for (final IUser user : users) {

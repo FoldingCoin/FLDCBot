@@ -6,13 +6,19 @@ import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
 import net.darkhax.botbase.utils.MessageUtils;
-import net.foldingcoin.fldcbot.commands.*;
+import net.foldingcoin.fldcbot.commands.CommandHelp;
+import net.foldingcoin.fldcbot.commands.CommandInfo;
+import net.foldingcoin.fldcbot.commands.CommandLookup;
+import net.foldingcoin.fldcbot.commands.CommandPPD;
+import net.foldingcoin.fldcbot.commands.CommandUser;
+import net.foldingcoin.fldcbot.commands.CommandWallet;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -25,6 +31,9 @@ public class FLDCBot extends BotBase {
 
     private final Configuration config;
     private final ScheduledTimer timer;
+
+    private IRole roleAdmin;
+    private IRole roleTeamFLDC;
 
     public FLDCBot (String botName, Configuration config) {
 
@@ -45,7 +54,7 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("nacl", new CommandInfo("Web Folding Client", "The web client allows you to fold from your internet browser. While the folding browser will not earn as many points, it is faster at completing work units. You can try it out " + MessageUtils.makeHyperlink("here", "http://fahwebx.stanford.edu/nacl/") + "."));
         handler.registerCommand("market", new CommandInfo("FLDC Coin Market Cap", "Coin Market Cap has info about many crypto currencies. You can find info about FoldingCoin such as the price, volume, and total supply " + MessageUtils.makeHyperlink("here", "https://coinmarketcap.com/currencies/foldingcoin") + "."));
         handler.registerCommand("ppd", new CommandPPD("FLDC PPD", "The current FLDC PPD is: "));
-    
+
     }
 
     @Override
@@ -59,6 +68,11 @@ public class FLDCBot extends BotBase {
 
         this.timer.scheduleRepeating(0, 60000, StatusHandler::updateStatusMessage);
         FLDCStats.init();
+
+        // Guild Specific init
+        this.roleAdmin = instance.getRoleByID(405483553904656386L);
+        this.roleTeamFLDC = instance.getRoleByID(379170648208965633L);
+        // this.roleTeamCURE = instance.getRoleByID(386366756479827969L);
     }
 
     @Override
@@ -71,15 +85,16 @@ public class FLDCBot extends BotBase {
     @Override
     public boolean isModerator (IGuild guild, IUser user) {
 
-        // TODO load up the moderator info
-        return false;
+        // Checks if the user has the FLDC Team role.
+        return user.hasRole(this.roleTeamFLDC);
     }
 
     @Override
     public boolean isAdminUser (IGuild guild, IUser user) {
 
-        // TODO load up the admin info
-        return false;
+        // Checks if the user has the FLDC admin role, or their ID is equal to Darkhax or
+        // Jared's id.
+        return user.hasRole(this.roleAdmin) || user.getLongID() == 137952759914823681L || user.getLongID() == 79179147875721216L;
     }
 
     /**

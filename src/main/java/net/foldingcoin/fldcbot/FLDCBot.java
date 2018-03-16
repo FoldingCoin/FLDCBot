@@ -71,8 +71,7 @@ public class FLDCBot extends BotBase {
 
         this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(5), CoinInfoHandler::updateCoinInfo);
         this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(1), StatusHandler::updateStatusMessage);
-
-        FLDCStats.init();
+        this.timer.scheduleRepeating(0, TimeUnit.DAYS.toMillis(1), FLDCStats::reload);
 
         // Guild Specific init
         this.roleAdmin = instance.getRoleByID(405483553904656386L);

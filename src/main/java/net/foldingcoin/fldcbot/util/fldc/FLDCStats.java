@@ -43,8 +43,16 @@ public class FLDCStats {
     /**
      * Downloads the unpaid FLDC data and collects it for use.
      */
-    public static void init () {
-
+    public static void reload () {
+        distributionsFuture.clear();
+        distributionsPast.clear();
+        distributionsYesterday.clear();
+        distributionsDifference.clear();
+        totalPoints = 0;
+        pastPoints = 0;
+        futurePoints = 0;
+        differencePoints = 0;
+        yesterdayPoints = 0;
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Downloads the files

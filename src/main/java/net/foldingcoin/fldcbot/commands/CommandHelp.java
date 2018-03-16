@@ -25,7 +25,7 @@ public class CommandHelp implements Command {
             }
         }
 
-        MessageUtils.sendPrivateMessage(bot.instance, message.getAuthor(), MessageUtils.makeMultiCodeBlock(joiner.toString()));
+        bot.sendPrivateMessage(message.getAuthor(), MessageUtils.makeMultiCodeBlock(joiner.toString()));
         message.addReaction(EmojiManager.getForAlias("white_check_mark"));
     }
 

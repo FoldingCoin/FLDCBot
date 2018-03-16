@@ -2,7 +2,6 @@ package net.foldingcoin.fldcbot.commands;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.Command;
-import net.darkhax.botbase.utils.MessageUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
@@ -24,7 +23,7 @@ public class CommandInfo implements Command {
     @Override
     public void processCommand (BotBase bot, IChannel channel, IMessage message, String[] params) {
 
-        MessageUtils.sendMessage(channel, this.builder.build());
+        bot.sendMessage(channel, this.builder.build());
     }
 
     @Override

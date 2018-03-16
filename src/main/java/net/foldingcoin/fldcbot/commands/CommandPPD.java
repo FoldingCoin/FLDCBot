@@ -1,7 +1,6 @@
 package net.foldingcoin.fldcbot.commands;
 
 import net.darkhax.botbase.BotBase;
-import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
@@ -20,7 +19,7 @@ public class CommandPPD extends CommandInfo {
     public void processCommand (BotBase bot, IChannel channel, IMessage message, String[] params) {
 
         this.builder.withDesc(this.body + FLDCStats.getTeamPPD());
-        MessageUtils.sendMessage(channel, this.builder.build());
+        bot.sendMessage(channel, this.builder.build());
     }
 
 }

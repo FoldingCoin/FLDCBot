@@ -26,7 +26,7 @@ public class CommandLookup implements Command {
             final List<FLDCUser> users = FLDCStats.getFutureUsers(key);
 
             if (users.isEmpty()) {
-                MessageUtils.sendMessage(channel, "No information found for: " + MessageUtils.quote(key) + "!");
+                bot.sendMessage(channel, "No information found for: " + MessageUtils.quote(key) + "!");
             }
             else if (users.size() > 1) {
                 channel.sendMessage("More than 1 (one) user found (" + users.size() + " found), please use the full Folding@Home username!");
@@ -39,7 +39,7 @@ public class CommandLookup implements Command {
                 embed.appendField("Token", user.getToken() + "", true);
                 embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
                 embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
-                MessageUtils.sendMessage(channel, embed.build());
+                bot.sendMessage(channel, embed.build());
             }
         }
     }

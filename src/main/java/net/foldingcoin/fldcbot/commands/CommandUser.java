@@ -8,7 +8,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.Command;
 import net.darkhax.botbase.embed.MessageUser;
-import net.darkhax.botbase.utils.MessageUtils;
 import net.darkhax.botbase.utils.UserUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -32,16 +31,16 @@ public class CommandUser implements Command {
             // Checks if no users were found, and gives a warning if it was.
             if (users.isEmpty()) {
 
-                MessageUtils.sendMessage(channel, "No users were found for your request.");
+                bot.sendMessage(channel, "No users were found for your request.");
                 return;
             }
 
             // Iterate through all users and print their info to chat.
             for (final IUser user : users) {
 
-                final MessageUser embed = new MessageUser(user, channel.getGuild());
+                final MessageUser embed = new MessageUser(user, channel.getGuild(), true);
                 embed.withColor(user.getColorForGuild(channel.getGuild()));
-                MessageUtils.sendMessage(channel, embed.build());
+                bot.sendMessage(channel, embed.build());
             }
         }
     }

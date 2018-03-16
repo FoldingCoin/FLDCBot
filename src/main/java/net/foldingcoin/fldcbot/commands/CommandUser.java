@@ -42,9 +42,11 @@ public class CommandUser implements Command {
                 embed.withColor(user.getColorForGuild(channel.getGuild()));
                 bot.sendMessage(channel, embed.build());
             }
-        }else if(channel.isPrivate()){
+        }
+        else if (channel.isPrivate()) {
             bot.sendMessage(channel, "Sorry, this command can only be used in a server!");
-        }else{
+        }
+        else {
             bot.sendMessage(channel, "This bot requires an argument!");
         }
     }

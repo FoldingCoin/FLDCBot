@@ -1,4 +1,4 @@
-package net.foldingcoin.fldcbot.util.coininfo;
+package net.foldingcoin.fldcbot.handler.coininfo;
 
 import java.io.File;
 import java.io.FileReader;
@@ -7,10 +7,9 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.darkhax.botbase.BotBase;
 import net.foldingcoin.fldcbot.BotLauncher;
 
-public class CoinMarketCap {
+public class CoinInfoHandler {
 
     private static final Gson GSON = new GsonBuilder().create();
     private static final File DIR_INFO = new File(BotLauncher.DATA_DIR, "coin_info");
@@ -18,30 +17,33 @@ public class CoinMarketCap {
     private static final String URL_COIN_INFO = "https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s";
     private static final String ID_FLDC = "foldingcoin";
     private static final String ID_CURE = "curecoin";
+    private static final String ID_BTC = "bitcoin";
     private static final String ID_USD = "USD";
 
-    /**
-     * Downloads the current info for CureCoin and returns an object containing the current
-     * info.
-     *
-     * @param bot Instance of the bot to download the files.
-     * @return The info for CureCoin at the current moment in time.
-     */
-    public static CoinInfo getCure (BotBase bot) {
+    private static CoinInfo infoFLDC;
+    private static CoinInfo infoCURE;
+    private static CoinInfo infoBTC;
 
-        return getCoinInfo(bot, ID_CURE, ID_USD);
+    public static CoinInfo getFLDC () {
+
+        return infoFLDC;
     }
 
-    /**
-     * Downloads the current info for FoldingCoin and returns an object containing the current
-     * info.
-     *
-     * @param bot Instance of the bot to download the files.
-     * @return The info for FoldingCoin at the current moment in time.
-     */
-    public static CoinInfo getFldc (BotBase bot) {
+    public static CoinInfo getCURE () {
 
-        return getCoinInfo(bot, ID_FLDC, ID_USD);
+        return infoCURE;
+    }
+
+    public static CoinInfo getBTC () {
+
+        return infoBTC;
+    }
+
+    public static void updateCoinInfo () {
+
+        infoFLDC = getCoinInfo(ID_FLDC, ID_USD);
+        infoCURE = getCoinInfo(ID_CURE, ID_USD);
+        infoBTC = getCoinInfo(ID_BTC, ID_USD);
     }
 
     /**
@@ -53,11 +55,7 @@ public class CoinMarketCap {
      * @param convert The currency to convert to.
      * @return The current coin info.
      */
-    // TODO This currently downloads the data every time it is called. This is because we want
-    // the latest data and it is impossible for this method to be fired through normal use at a
-    // rate faster than CoinMarketCap permits. This may be changed to run automatically every
-    // few minutes however performance differences would be relatively insignificant.
-    public static CoinInfo getCoinInfo (BotBase bot, String coin, String convert) {
+    private static CoinInfo getCoinInfo (String coin, String convert) {
 
         // Get the url for the json info
         final String coinUrl = String.format(URL_COIN_INFO, coin, convert);
@@ -68,7 +66,7 @@ public class CoinMarketCap {
         final File saveDir = new File(DIR_INFO, coin);
 
         // Downloads the json data and saves it to a file.
-        final File downloadFile = bot.downloadFile(coinUrl, saveDir, fileName);
+        final File downloadFile = BotLauncher.instance.downloadFile(coinUrl, saveDir, fileName);
 
         try (final FileReader reader = new FileReader(downloadFile)) {
 

@@ -2,11 +2,12 @@ package net.foldingcoin.fldcbot.handler.status;
 
 import java.util.function.Supplier;
 
+import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 
 public enum StatusMessage {
 
-    PRICE_FLDC( () -> "FLDC Price"),
+    PRICE_FLDC( () -> String.format("FLDC: %.2f USD", Float.parseFloat(CoinInfoHandler.getFLDC().getPriceUsd()))),
     TEAM_POINTS( () -> "Team Points"),
     DISTRIBUTION_TIMER( () -> String.format("Distrib in %d days", DistributionUtils.getDaysToNextDistribution()));
 

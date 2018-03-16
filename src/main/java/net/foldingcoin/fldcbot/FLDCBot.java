@@ -1,8 +1,7 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
@@ -15,7 +14,7 @@ import net.foldingcoin.fldcbot.commands.CommandPPD;
 import net.foldingcoin.fldcbot.commands.CommandReload;
 import net.foldingcoin.fldcbot.commands.CommandUser;
 import net.foldingcoin.fldcbot.commands.CommandWallet;
-import net.foldingcoin.fldcbot.handler.IReloadable;
+import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
@@ -35,7 +34,6 @@ public class FLDCBot extends BotBase {
 
     private final Configuration config;
     private final ScheduledTimer timer;
-    private final List<IReloadable> reloadListeners;
 
     private IRole roleAdmin;
     private IRole roleTeamFLDC;
@@ -45,7 +43,6 @@ public class FLDCBot extends BotBase {
         super(botName, config.getDiscordToken(), config.getCommandKey(), BotLauncher.LOG);
         this.config = config;
         this.timer = new ScheduledTimer();
-        this.reloadListeners = new ArrayList<>();
     }
 
     @Override
@@ -72,20 +69,21 @@ public class FLDCBot extends BotBase {
     @Override
     public void onSucessfulLogin (IDiscordClient instance) {
 
-        this.timer.scheduleRepeating(0, 60000, StatusHandler::updateStatusMessage);
+        this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(5), CoinInfoHandler::updateCoinInfo);
+        this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(1), StatusHandler::updateStatusMessage);
+
         FLDCStats.init();
 
         // Guild Specific init
         this.roleAdmin = instance.getRoleByID(405483553904656386L);
         this.roleTeamFLDC = instance.getRoleByID(379170648208965633L);
-        // this.roleTeamCURE = instance.getRoleByID(386366756479827969L);
     }
 
     @Override
     public void reload () {
 
         super.reload();
-        this.reloadListeners.forEach(listener -> listener.onReload(this));
+        CoinInfoHandler.updateCoinInfo();
     }
 
     @Override
@@ -133,6 +131,5 @@ public class FLDCBot extends BotBase {
                 event.getGuild().getChannelsByName("bot-testing").get(0).sendMessage(builder.build());
             }
         }
-
     }
 }

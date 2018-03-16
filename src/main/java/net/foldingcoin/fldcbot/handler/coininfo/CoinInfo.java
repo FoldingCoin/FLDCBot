@@ -1,4 +1,4 @@
-package net.foldingcoin.fldcbot.util.coininfo;
+package net.foldingcoin.fldcbot.handler.coininfo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

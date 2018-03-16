@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +36,9 @@ public class Configuration {
 
     @Expose
     private String encryptionKey = "Change This!";
+    
+    @Expose
+    private List<String> urlWhitelist = new ArrayList<>();
 
     public void saveConfig () {
 
@@ -117,5 +121,14 @@ public class Configuration {
     public void setEncryptionKey (String encryptionKey) {
 
         this.encryptionKey = encryptionKey;
+    }
+    
+    
+    public List<String> getUrlWhitelist() {
+        return urlWhitelist;
+    }
+    
+    public void setUrlWhitelist(List<String> urlWhitelist) {
+        this.urlWhitelist = urlWhitelist;
     }
 }

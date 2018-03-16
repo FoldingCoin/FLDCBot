@@ -1,20 +1,14 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
-import java.util.Timer;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
 import net.darkhax.botbase.utils.MessageUtils;
-import net.foldingcoin.fldcbot.commands.CommandHelp;
-import net.foldingcoin.fldcbot.commands.CommandInfo;
-import net.foldingcoin.fldcbot.commands.CommandLookup;
-import net.foldingcoin.fldcbot.commands.CommandPPD;
-import net.foldingcoin.fldcbot.commands.CommandReload;
-import net.foldingcoin.fldcbot.commands.CommandUser;
-import net.foldingcoin.fldcbot.commands.CommandWallet;
+import net.foldingcoin.fldcbot.commands.*;
 import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
@@ -38,6 +32,7 @@ public class FLDCBot extends BotBase {
 
     private IRole roleAdmin;
     private IRole roleTeamFLDC;
+    private  final List<String> urlPrefixes = Arrays.asList("http://", "https://", "www.", "www(dot)");
 
     public FLDCBot (String botName, Configuration config) {
 
@@ -59,6 +54,7 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("nacl", new CommandInfo("Web Folding Client", "The web client allows you to fold from your internet browser. While the folding browser will not earn as many points, it is faster at completing work units. You can try it out " + MessageUtils.makeHyperlink("here", "http://fahwebx.stanford.edu/nacl/") + "."));
         handler.registerCommand("market", new CommandInfo("FLDC Coin Market Cap", "Coin Market Cap has info about many crypto currencies. You can find info about FoldingCoin such as the price, volume, and total supply " + MessageUtils.makeHyperlink("here", "https://coinmarketcap.com/currencies/foldingcoin") + "."));
         handler.registerCommand("ppd", new CommandPPD("FLDC PPD", "The current FLDC PPD is: "));
+        handler.registerCommand("urlwhitelist", new CommandWhitelist());
     }
 
     @Override
@@ -100,6 +96,8 @@ public class FLDCBot extends BotBase {
         // Jared's id.
         return user.hasRole(this.roleAdmin) || user.getLongID() == 137952759914823681L || user.getLongID() == 79179147875721216L;
     }
+    
+
 
     /**
      * Called by the event dispatcher when a message is sent to a channel that we can see.
@@ -113,23 +111,51 @@ public class FLDCBot extends BotBase {
         if (!event.getChannel().getName().toLowerCase().equalsIgnoreCase("bot-testing")) {
             return;
         }
-
-        if (event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
+        if(event.getMessage().getContent().startsWith(config.getCommandKey())){
+            return;
+        }
+        if (!event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
             final String content = event.getMessage().getContent().toLowerCase();
-            if (content.contains("http://") || content.contains("https://") || content.contains("www.") || content.contains("www(dot)")) {
-                event.getMessage().delete();
-                event.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
-                // Logging purposes
-                final EmbedBuilder builder = new EmbedBuilder();
-                builder.withTitle(" tried to send a link in: " + event.getChannel().getName());
-                builder.withColor(Color.red);
-                builder.withDesc("Message contents:\n\n" + content);
-                builder.withTimestamp(event.getMessage().getTimestamp());
-                builder.withThumbnail(event.getAuthor().getAvatarURL());
-                builder.withAuthorName(event.getAuthor().getName());
-                // TODO change this channel name
-                event.getGuild().getChannelsByName("bot-testing").get(0).sendMessage(builder.build());
+            for(String s : content.split(" ")) {
+                boolean isUrl = false;
+                for(String prefix : urlPrefixes) {
+                    if(s.startsWith(prefix)){
+                        s = s.substring(prefix.length());
+                        isUrl = true;
+                    }
+                }
+                if(isUrl) {
+                    String url = s;
+                    if(url.endsWith("/")){
+                        url = url.substring(0,url.length()-1);
+                    }
+                    boolean valid = false;
+                    for(String s1 : getConfig().getUrlWhitelist()) {
+                        if(url.startsWith(s1)) {
+                            valid = true;
+                        }
+                    }
+                    if(!valid){
+                        event.getMessage().delete();
+                        event.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
+                        // Logging purposes
+                        final EmbedBuilder builder = new EmbedBuilder();
+                        builder.withTitle(" tried to send a link in: " + event.getChannel().getName());
+                        builder.withColor(Color.red);
+                        builder.withDesc("Message contents:\n\n" + content);
+                        builder.withTimestamp(event.getMessage().getTimestamp());
+                        builder.withThumbnail(event.getAuthor().getAvatarURL());
+                        builder.withAuthorName(event.getAuthor().getName());
+                        // TODO change this channel name
+                        event.getGuild().getChannelsByName("bot-testing").get(0).sendMessage(builder.build());
+                    }
+                }
+                
             }
         }
+    }
+    
+    public Configuration getConfig() {
+        return config;
     }
 }

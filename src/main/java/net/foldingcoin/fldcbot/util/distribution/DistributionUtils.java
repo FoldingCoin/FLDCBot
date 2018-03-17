@@ -6,7 +6,17 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
-public class DistributionUtils {
+public final class DistributionUtils {
+
+    /**
+     * Utility classes, such as this one, are not meant to be instantiated. Java adds an
+     * implicit public constructor to every class which does not define at lease one
+     * explicitly. Hence why this constructor was added.
+     */
+    private DistributionUtils () {
+
+        throw new IllegalAccessError("Utility class");
+    }
 
     public static long getDaysToNextDistribution () {
 

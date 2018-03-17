@@ -14,7 +14,17 @@ import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 
-public class APIHandler {
+public final class APIHandler {
+
+    /**
+     * Utility classes, such as this one, are not meant to be instantiated. Java adds an
+     * implicit public constructor to every class which does not define at lease one
+     * explicitly. Hence why this constructor was added.
+     */
+    private APIHandler () {
+
+        throw new IllegalAccessError("Utility class");
+    }
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 

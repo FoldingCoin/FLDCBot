@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 import net.foldingcoin.fldcbot.BotLauncher;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 
-public class FLDCStats {
+public final class FLDCStats {
 
     private static final Gson GSON = new GsonBuilder().create();
 
@@ -41,6 +41,16 @@ public class FLDCStats {
     public static long yesterdayPoints = 0;
 
     public static int activeFolders = 0;
+
+    /**
+     * Utility classes, such as this one, are not meant to be instantiated. Java adds an
+     * implicit public constructor to every class which does not define at lease one
+     * explicitly. Hence why this constructor was added.
+     */
+    private FLDCStats () {
+
+        throw new IllegalAccessError("Utility class");
+    }
 
     /**
      * Downloads the unpaid FLDC data and collects it for use.

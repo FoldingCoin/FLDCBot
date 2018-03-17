@@ -9,7 +9,17 @@ import com.google.gson.GsonBuilder;
 
 import net.foldingcoin.fldcbot.BotLauncher;
 
-public class CoinInfoHandler {
+public final class CoinInfoHandler {
+
+    /**
+     * Utility classes, such as this one, are not meant to be instantiated. Java adds an
+     * implicit public constructor to every class which does not define at lease one
+     * explicitly. Hence why this constructor was added.
+     */
+    private CoinInfoHandler () {
+
+        throw new IllegalAccessError("Utility class");
+    }
 
     private static final Gson GSON = new GsonBuilder().create();
     private static final File DIR_INFO = new File(BotLauncher.DATA_DIR, "coin_info");

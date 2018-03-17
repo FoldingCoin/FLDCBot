@@ -1,10 +1,12 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.linkedin.urls.Url;
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
@@ -126,25 +128,24 @@ public class FLDCBot extends BotBase {
         if (event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
             final String content = event.getMessage().getContent().toLowerCase();
             for (String s : content.split(" ")) {
+                Url url;
+                try {
+                     url = Url.create(s);
+                } catch(MalformedURLException e) {
+                    //do nothing, since it isn't a URL
+                    break;
+                }
+    
                 boolean isUrl = false;
-                for (final String prefix : this.urlPrefixes) {
-                    if (s.startsWith(prefix)) {
-                        s = s.substring(prefix.length());
+                for (final String s1 : this.getConfig().getUrlWhitelist()) {
+                    if(url.getHost().replaceAll("www.", "").startsWith(s1)) {
                         isUrl = true;
                     }
+                    if(isUrl){
+                        break;
+                    }
                 }
-                if (isUrl) {
-                    String url = s;
-                    if (url.endsWith("/")) {
-                        url = url.substring(0, url.length() - 1);
-                    }
-                    boolean valid = false;
-                    for (final String s1 : this.getConfig().getUrlWhitelist()) {
-                        if (url.startsWith(s1)) {
-                            valid = true;
-                        }
-                    }
-                    if (!valid) {
+                if (!isUrl) {
                         event.getMessage().delete();
                         event.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
                         // Logging purposes
@@ -156,7 +157,6 @@ public class FLDCBot extends BotBase {
                         builder.withThumbnail(event.getAuthor().getAvatarURL());
                         builder.withAuthorName(event.getAuthor().getName());
                         event.getGuild().getChannelsByName("bot-deleted-links").get(0).sendMessage(builder.build());
-                    }
                 }
 
             }

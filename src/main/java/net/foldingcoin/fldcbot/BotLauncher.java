@@ -28,7 +28,6 @@ public class BotLauncher {
     /**
      * A globally usable reference to the bot instance.
      */
-    // TODO consider removing this variable.
     public static FLDCBot instance;
 
     public static void main (String... args) {

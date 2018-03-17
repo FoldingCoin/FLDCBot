@@ -104,8 +104,7 @@ public class FLDCBot extends BotBase {
     public boolean isAdminUser (IGuild guild, IUser user) {
 
         // Checks if the user has the FLDC admin role, or their ID is equal to Darkhax
-        // or
-        // Jared's id.
+        // or Jared's id.
         return user.hasRole(this.roleAdmin) || user.getLongID() == 137952759914823681L || user.getLongID() == 79179147875721216L;
     }
 

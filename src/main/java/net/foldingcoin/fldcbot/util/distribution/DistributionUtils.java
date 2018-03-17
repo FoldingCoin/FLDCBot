@@ -8,8 +8,6 @@ import java.time.temporal.TemporalAdjusters;
 
 public class DistributionUtils {
 
-    // TODO add their time zone as constant
-
     public static long getDaysToNextDistribution () {
 
         return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution());

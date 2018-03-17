@@ -1,11 +1,11 @@
 package net.foldingcoin.fldcbot.commands;
 
+import java.text.NumberFormat;
+
 import net.darkhax.botbase.BotBase;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
-
-import java.text.NumberFormat;
 
 public class CommandPPD extends CommandInfo {
 

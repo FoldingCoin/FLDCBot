@@ -1,14 +1,23 @@
 package net.foldingcoin.fldcbot;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
 import net.darkhax.botbase.utils.MessageUtils;
-import net.foldingcoin.fldcbot.commands.*;
+import net.foldingcoin.fldcbot.commands.CommandHelp;
+import net.foldingcoin.fldcbot.commands.CommandInfo;
+import net.foldingcoin.fldcbot.commands.CommandLookup;
+import net.foldingcoin.fldcbot.commands.CommandMarket;
+import net.foldingcoin.fldcbot.commands.CommandPPD;
+import net.foldingcoin.fldcbot.commands.CommandReload;
+import net.foldingcoin.fldcbot.commands.CommandUser;
+import net.foldingcoin.fldcbot.commands.CommandWallet;
+import net.foldingcoin.fldcbot.commands.CommandWhitelist;
 import net.foldingcoin.fldcbot.handler.api.APIHandler;
 import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
@@ -33,7 +42,7 @@ public class FLDCBot extends BotBase {
 
     private IRole roleAdmin;
     private IRole roleTeamFLDC;
-    private  final List<String> urlPrefixes = Arrays.asList("http://", "https://", "www.", "www(dot)");
+    private final List<String> urlPrefixes = Arrays.asList("http://", "https://", "www.", "www(dot)");
 
     public FLDCBot (String botName, Configuration config) {
 
@@ -66,12 +75,12 @@ public class FLDCBot extends BotBase {
 
     @Override
     public void onSucessfulLogin (IDiscordClient instance) {
-        
+
         this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(5), CoinInfoHandler::updateCoinInfo);
         this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(1), StatusHandler::updateStatusMessage);
         this.timer.scheduleRepeating(0, TimeUnit.HOURS.toMillis(6), FLDCStats::reload);
         this.timer.scheduleRepeating(TimeUnit.SECONDS.toMillis(15), TimeUnit.MINUTES.toMillis(5), APIHandler::update);
-    
+
         // Guild Specific init
         this.roleAdmin = instance.getRoleByID(405483553904656386L);
         this.roleTeamFLDC = instance.getRoleByID(379170648208965633L);
@@ -94,12 +103,11 @@ public class FLDCBot extends BotBase {
     @Override
     public boolean isAdminUser (IGuild guild, IUser user) {
 
-        // Checks if the user has the FLDC admin role, or their ID is equal to Darkhax or
+        // Checks if the user has the FLDC admin role, or their ID is equal to Darkhax
+        // or
         // Jared's id.
         return user.hasRole(this.roleAdmin) || user.getLongID() == 137952759914823681L || user.getLongID() == 79179147875721216L;
     }
-    
-
 
     /**
      * Called by the event dispatcher when a message is sent to a channel that we can see.
@@ -113,31 +121,31 @@ public class FLDCBot extends BotBase {
         if (!event.getChannel().getName().toLowerCase().equalsIgnoreCase("bot-testing")) {
             return;
         }
-        if(event.getMessage().getContent().startsWith(config.getCommandKey())){
+        if (event.getMessage().getContent().startsWith(this.config.getCommandKey())) {
             return;
         }
         if (event.getAuthor().getRolesForGuild(event.getGuild()).isEmpty()) {
             final String content = event.getMessage().getContent().toLowerCase();
-            for(String s : content.split(" ")) {
+            for (String s : content.split(" ")) {
                 boolean isUrl = false;
-                for(String prefix : urlPrefixes) {
-                    if(s.startsWith(prefix)){
+                for (final String prefix : this.urlPrefixes) {
+                    if (s.startsWith(prefix)) {
                         s = s.substring(prefix.length());
                         isUrl = true;
                     }
                 }
-                if(isUrl) {
+                if (isUrl) {
                     String url = s;
-                    if(url.endsWith("/")){
-                        url = url.substring(0,url.length()-1);
+                    if (url.endsWith("/")) {
+                        url = url.substring(0, url.length() - 1);
                     }
                     boolean valid = false;
-                    for(String s1 : getConfig().getUrlWhitelist()) {
-                        if(url.startsWith(s1)) {
+                    for (final String s1 : this.getConfig().getUrlWhitelist()) {
+                        if (url.startsWith(s1)) {
                             valid = true;
                         }
                     }
-                    if(!valid){
+                    if (!valid) {
                         event.getMessage().delete();
                         event.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
                         // Logging purposes
@@ -152,12 +160,13 @@ public class FLDCBot extends BotBase {
                         event.getGuild().getChannelsByName("bot-testing").get(0).sendMessage(builder.build());
                     }
                 }
-                
+
             }
         }
     }
-    
-    public Configuration getConfig() {
-        return config;
+
+    public Configuration getConfig () {
+
+        return this.config;
     }
 }

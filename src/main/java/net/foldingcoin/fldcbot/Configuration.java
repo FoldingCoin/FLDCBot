@@ -5,7 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,10 +37,10 @@ public class Configuration {
 
     @Expose
     private String encryptionKey = "Change This!";
-    
+
     @Expose
     private List<String> urlWhitelist = new ArrayList<>();
-    
+
     @Expose
     private String webDir = "";
 
@@ -125,21 +126,24 @@ public class Configuration {
 
         this.encryptionKey = encryptionKey;
     }
-    
-    
-    public List<String> getUrlWhitelist() {
-        return urlWhitelist;
+
+    public List<String> getUrlWhitelist () {
+
+        return this.urlWhitelist;
     }
-    
-    public void setUrlWhitelist(List<String> urlWhitelist) {
+
+    public void setUrlWhitelist (List<String> urlWhitelist) {
+
         this.urlWhitelist = urlWhitelist;
     }
-    
-    public String getWebDir() {
-        return webDir;
+
+    public String getWebDir () {
+
+        return this.webDir;
     }
-    
-    public void setWebDir(String webDir) {
+
+    public void setWebDir (String webDir) {
+
         this.webDir = webDir;
     }
 }

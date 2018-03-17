@@ -1,6 +1,8 @@
 package net.foldingcoin.fldcbot.util.fldc;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import net.foldingcoin.fldcbot.BotLauncher;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
@@ -36,14 +39,14 @@ public class FLDCStats {
     public static long futurePoints = 0;
     public static long differencePoints = 0;
     public static long yesterdayPoints = 0;
-    
+
     public static int activeFolders = 0;
-    
 
     /**
      * Downloads the unpaid FLDC data and collects it for use.
      */
     public static void reload () {
+
         distributionsFuture.clear();
         distributionsPast.clear();
         distributionsYesterday.clear();
@@ -88,7 +91,8 @@ public class FLDCStats {
         pastPoints = totalPoints - futurePoints;
         differencePoints = futurePoints - pastPoints;
 
-        // Loops over the users and creates a new user that has the difference between the old
+        // Loops over the users and creates a new user that has the difference between
+        // the old
         // and new user.
         for (final String key : distributionsFuture.keySet()) {
             final FLDCUser user_future = distributionsFuture.get(key);
@@ -97,11 +101,11 @@ public class FLDCStats {
             final long oldCred = user_past != null ? user_past.getNewCredit() : 0;
             final FLDCUser user_diff = new FLDCUser(user_future.getId(), user_future.getName(), user_future.getToken(), user_future.getAddress(), user_future.getNewCredit() - oldCred);
             distributionsDifference.put(key, user_diff);
-            if(user_diff.getNewCredit()>0){
+            if (user_diff.getNewCredit() > 0) {
                 activeFolders++;
             }
         }
-        
+
     }
 
     public static long getTeamPPD () {

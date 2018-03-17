@@ -48,14 +48,16 @@ public class DistributionUtils {
 
         if (wantNext) {
 
-            // If this month's distribution has passed, return next months. Otherwise use this
+            // If this month's distribution has passed, return next months. Otherwise use
+            // this
             // month's distribution date.
             return hasDistributionThisMonthPassed ? getFirstSaturday(currentMonth.plusMonths(1)) : distributionThisMonth;
         }
 
         else {
 
-            // If this month's distribution has passed, it is the last distribution. Otherwise
+            // If this month's distribution has passed, it is the last distribution.
+            // Otherwise
             // use the one for last month.
             return hasDistributionThisMonthPassed ? distributionThisMonth : getFirstSaturday(currentMonth.minusMonths(1));
         }

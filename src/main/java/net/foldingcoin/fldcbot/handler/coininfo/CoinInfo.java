@@ -48,6 +48,10 @@ public class CoinInfo {
     @Expose
     @SerializedName("percent_change_7d")
     private String percentChange7d;
+    
+    @Expose
+    @SerializedName("last_updated")
+    private String lastUpdated;
 
     public String getId () {
 
@@ -157,5 +161,13 @@ public class CoinInfo {
     public void setPercentChange7d (String percentChange7d) {
 
         this.percentChange7d = percentChange7d;
+    }
+    
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+    
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

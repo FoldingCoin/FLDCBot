@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.foldingcoin.fldcbot.BotLauncher;
-import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
+import net.foldingcoin.fldcbot.handler.coininfo.*;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 
@@ -37,7 +37,7 @@ public final class APIHandler {
             try (final BufferedWriter writer = new BufferedWriter(new FileWriter(webDir))) {
 
                 final int activeFolders = FLDCStats.getActiveFolders() > 0 ? FLDCStats.getActiveFolders() : 1;
-                final FLDCApi api = new FLDCApi(FLDCStats.getTeamPPD(), FLDCStats.getActiveFolders(), FLDCStats.getTotalFolders(), FLDCStats.getTeamPPD() / activeFolders, CoinInfoHandler.getFLDC(), CoinInfoHandler.getBTC(), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getNextDistribution()), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getLastDistribution()), DistributionUtils.getDaysToNextDistribution());
+                final FLDCApi api = new FLDCApi(FLDCStats.getTeamPPD(), FLDCStats.getActiveFolders(), FLDCStats.getTotalFolders(), FLDCStats.getTeamPPD() / activeFolders, CoinInfoHandler.getFLDC(), CoinInfoHandler.getBTC(), CoinInfoHandler.getCURE(), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getNextDistribution()), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getLastDistribution()), DistributionUtils.getDaysToNextDistribution());
                 writer.write(GSON.toJson(api, FLDCApi.class));
             }
 

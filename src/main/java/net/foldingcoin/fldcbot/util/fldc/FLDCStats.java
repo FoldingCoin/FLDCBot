@@ -196,13 +196,7 @@ public final class FLDCStats {
 
         final List<FLDCUser> users = new LinkedList<>();
         for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
-            if (entry.getKey().startsWith(key)) {
-                users.add(entry.getValue());
-            }
-            else if (entry.getValue().getAddress().equals(key)) {
-                users.add(entry.getValue());
-            }
-            else if (key.equalsIgnoreCase(entry.getValue().getId() + "")) {
+            if (entry.getKey().startsWith(key) || entry.getValue().getAddress().equals(key) || key.equalsIgnoreCase(entry.getValue().getId() + "")) {
                 users.add(entry.getValue());
             }
         }

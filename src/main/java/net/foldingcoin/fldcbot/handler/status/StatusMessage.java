@@ -9,7 +9,7 @@ import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 
 public enum StatusMessage {
 
-    PRICE_FLDC( () -> String.format("FLDC: %.2f USD", Float.parseFloat(CoinInfoHandler.getFLDC().getPriceUsd()))),
+    PRICE_FLDC( () -> String.format("FLDC: %.5f USD", Float.parseFloat(CoinInfoHandler.getFLDC().getPriceUsd()))),
     TEAM_POINTS( () -> "FLDC PPD: " + NumberFormat.getInstance().format(FLDCStats.getTeamPPD())),
     DISTRIBUTION_TIMER( () -> String.format("Distrib in %d days", DistributionUtils.getDaysToNextDistribution()));
 

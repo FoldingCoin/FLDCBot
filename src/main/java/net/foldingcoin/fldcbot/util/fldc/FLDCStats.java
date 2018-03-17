@@ -164,16 +164,13 @@ public final class FLDCStats {
     public static FLDCUser getUser (Map<String, FLDCUser> map, String key) {
 
         for (final Map.Entry<String, FLDCUser> entry : map.entrySet()) {
-            if (entry.getKey().startsWith(key)) {
-                return entry.getValue();
-            }
-            else if (entry.getValue().getAddress().equals(key)) {
-                return entry.getValue();
-            }
-            else if (key.equalsIgnoreCase(entry.getValue().getId() + "")) {
+
+            if (entry.getKey().startsWith(key) || entry.getValue().getAddress().equals(key) || key.equalsIgnoreCase(entry.getValue().getId() + "")) {
+
                 return entry.getValue();
             }
         }
+
         return null;
     }
 

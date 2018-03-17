@@ -26,3 +26,28 @@ dependencies {
 }
 
 // TODO add application export settings.
+
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'FLDCBot', 'Implementation-Version': '1.0.0', 'Main-Class': 'net.foldingcoin.fldcbot.BotLauncher'
+    }
+    baseName = project.name + '-all'
+
+        from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it).matching {
+                exclude 'META-INF/**.RSA'
+                exclude 'META-INF/MANIFEST.MF'
+                exclude 'META-INF/log4j-provider.properties'
+            } } }
+    with jar
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'net.foldingcoin.fldcbot.BotLauncher'
+    )
+  }
+}

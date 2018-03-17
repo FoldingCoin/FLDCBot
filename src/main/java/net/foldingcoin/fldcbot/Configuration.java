@@ -39,6 +39,9 @@ public class Configuration {
     
     @Expose
     private List<String> urlWhitelist = new ArrayList<>();
+    
+    @Expose
+    private String webDir = "";
 
     public void saveConfig () {
 
@@ -130,5 +133,13 @@ public class Configuration {
     
     public void setUrlWhitelist(List<String> urlWhitelist) {
         this.urlWhitelist = urlWhitelist;
+    }
+    
+    public String getWebDir() {
+        return webDir;
+    }
+    
+    public void setWebDir(String webDir) {
+        this.webDir = webDir;
     }
 }

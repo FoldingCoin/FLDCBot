@@ -6,6 +6,7 @@ import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.BotLauncher;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.util.EmbedBuilder;
 
 /**
  * This command allows moderators to add URLs to the whitelist.
@@ -32,6 +33,16 @@ public class CommandWhitelist extends CommandModerator {
 
             BotLauncher.instance.getConfig().saveConfig();
             bot.sendMessage(channel, String.format("%s %s to the whitelist!", action, MessageUtils.quote(key)));
+        }else{
+            StringBuilder builder = new StringBuilder();
+            for(String s : BotLauncher.instance.getConfig().getUrlWhitelist()) {
+                builder.append(s).append("\n");
+            }
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.withColor((int) (Math.random()*0xFFFFFF));
+            embed.withTitle("Allowed Domains");
+            embed.withDesc(builder.toString());
+            bot.sendMessage(channel, embed.build());
         }
     }
 

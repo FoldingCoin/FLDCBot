@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 import net.foldingcoin.fldcbot.BotLauncher;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
@@ -103,18 +102,6 @@ public class FLDCStats {
             }
         }
         
-        if(!BotLauncher.instance.getConfig().getWebDir().isEmpty()){
-            try {
-                File webDir = new File(BotLauncher.instance.getConfig().getWebDir(), "fldcppd.json");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(webDir));
-                FLDCApi api = new FLDCApi(getTeamPPD(), activeFolders, getTeamPPD()/activeFolders, distributionsDifference.size());
-                writer.write(GSON.toJson(api, FLDCApi.class));
-                writer.close();
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     public static long getTeamPPD () {

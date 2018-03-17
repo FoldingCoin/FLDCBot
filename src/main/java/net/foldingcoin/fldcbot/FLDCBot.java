@@ -9,6 +9,7 @@ import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
 import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.commands.*;
+import net.foldingcoin.fldcbot.handler.api.APIHandler;
 import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
@@ -69,7 +70,8 @@ public class FLDCBot extends BotBase {
         this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(5), CoinInfoHandler::updateCoinInfo);
         this.timer.scheduleRepeating(0, TimeUnit.MINUTES.toMillis(1), StatusHandler::updateStatusMessage);
         this.timer.scheduleRepeating(0, TimeUnit.HOURS.toMillis(6), FLDCStats::reload);
-
+        this.timer.scheduleRepeating(TimeUnit.SECONDS.toMillis(15), TimeUnit.MINUTES.toMillis(5), APIHandler::update);
+    
         // Guild Specific init
         this.roleAdmin = instance.getRoleByID(405483553904656386L);
         this.roleTeamFLDC = instance.getRoleByID(379170648208965633L);

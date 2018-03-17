@@ -69,6 +69,8 @@ public class CommandWallet implements Command {
                 channel.sendMessage("`" + key + "` does not currently hold any assets.");
             }
 
+        }else{
+            bot.sendMessage(channel, "No wallet address was given!");
         }
     }
 

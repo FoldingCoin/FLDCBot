@@ -29,18 +29,16 @@ public final class FLDCStats {
     private static final String FILE_CURRENT_DISTRIBUTION = "distribution_last.json";
     private static final String FILE_YESTERDAY_DISTRIBUTION = "distribution_yesterday.json";
 
-    public static Map<String, FLDCUser> distributionsFuture = new TreeMap<>();
-    public static Map<String, FLDCUser> distributionsPast = new TreeMap<>();
-    public static Map<String, FLDCUser> distributionsYesterday = new TreeMap<>();
-    public static Map<String, FLDCUser> distributionsDifference = new TreeMap<>();
+    private static Map<String, FLDCUser> distributionsFuture = new TreeMap<>();
+    private static Map<String, FLDCUser> distributionsPast = new TreeMap<>();
+    private static Map<String, FLDCUser> distributionsYesterday = new TreeMap<>();
+    private static Map<String, FLDCUser> distributionsDifference = new TreeMap<>();
 
-    public static long totalPoints = 0;
-    public static long pastPoints = 0;
-    public static long futurePoints = 0;
-    public static long differencePoints = 0;
-    public static long yesterdayPoints = 0;
-
-    public static int activeFolders = 0;
+    private static long totalPoints = 0;
+    private static long futurePoints = 0;
+    private static long differencePoints = 0;
+    private static long yesterdayPoints = 0;
+    private static int activeFolders = 0;
 
     /**
      * Utility classes, such as this one, are not meant to be instantiated. Java adds an
@@ -62,10 +60,10 @@ public final class FLDCStats {
         distributionsYesterday.clear();
         distributionsDifference.clear();
         totalPoints = 0;
-        pastPoints = 0;
         futurePoints = 0;
         differencePoints = 0;
         yesterdayPoints = 0;
+        long pastPoints = 0;
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Downloads the files
@@ -200,4 +198,18 @@ public final class FLDCStats {
         return users;
     }
 
+    public static long getNewPoints () {
+
+        return differencePoints;
+    }
+
+    public static int getTotalFolders () {
+
+        return distributionsDifference.size();
+    }
+
+    public static int getActiveFolders () {
+
+        return activeFolders;
+    }
 }

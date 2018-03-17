@@ -37,7 +37,7 @@ public class CommandLookup implements Command {
                 embed.withTitle(fahUsername);
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
-                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.differencePoints * 7750000) + "", true);
+                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.getNewPoints() * 7750000) + "", true);
                 embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
                 bot.sendMessage(channel, embed.build());
             }

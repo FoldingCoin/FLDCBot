@@ -155,8 +155,7 @@ public class FLDCBot extends BotBase {
                         builder.withTimestamp(event.getMessage().getTimestamp());
                         builder.withThumbnail(event.getAuthor().getAvatarURL());
                         builder.withAuthorName(event.getAuthor().getName());
-                        // TODO change this channel name
-                        event.getGuild().getChannelsByName("bot-testing").get(0).sendMessage(builder.build());
+                        event.getGuild().getChannelsByName("bot-deleted-links").get(0).sendMessage(builder.build());
                     }
                 }
 

@@ -102,16 +102,15 @@ public final class FLDCStats {
         differencePoints = futurePoints - pastPoints;
 
         // Loops over the users and creates a new user that has the difference between
-        // the old
-        // and new user.
+        // the old and new user.
         for (final String key : distributionsFuture.keySet()) {
-            final FLDCUser user_future = distributionsFuture.get(key);
-            final FLDCUser user_past = distributionsPast.get(key);
+            final FLDCUser userFuture = distributionsFuture.get(key);
+            final FLDCUser userPast = distributionsPast.get(key);
             // There may not always be a past user
-            final long oldCred = user_past != null ? user_past.getNewCredit() : 0;
-            final FLDCUser user_diff = new FLDCUser(user_future.getId(), user_future.getName(), user_future.getToken(), user_future.getAddress(), user_future.getNewCredit() - oldCred);
-            distributionsDifference.put(key, user_diff);
-            if (user_diff.getNewCredit() > 0) {
+            final long oldCred = userPast != null ? userPast.getNewCredit() : 0;
+            final FLDCUser userDiff = new FLDCUser(userFuture.getId(), userFuture.getName(), userFuture.getToken(), userFuture.getAddress(), userFuture.getNewCredit() - oldCred);
+            distributionsDifference.put(key, userDiff);
+            if (userDiff.getNewCredit() > 0) {
                 activeFolders++;
             }
         }

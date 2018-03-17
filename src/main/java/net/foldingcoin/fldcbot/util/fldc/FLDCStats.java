@@ -1,8 +1,6 @@
 package net.foldingcoin.fldcbot.util.fldc;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +37,9 @@ public class FLDCStats {
     public static long futurePoints = 0;
     public static long differencePoints = 0;
     public static long yesterdayPoints = 0;
+    
+    public static int activeFolders = 0;
+    
 
     /**
      * Downloads the unpaid FLDC data and collects it for use.
@@ -97,6 +98,21 @@ public class FLDCStats {
             final long oldCred = user_past != null ? user_past.getNewCredit() : 0;
             final FLDCUser user_diff = new FLDCUser(user_future.getId(), user_future.getName(), user_future.getToken(), user_future.getAddress(), user_future.getNewCredit() - oldCred);
             distributionsDifference.put(key, user_diff);
+            if(user_diff.getNewCredit()>0){
+                activeFolders++;
+            }
+        }
+        
+        if(!BotLauncher.instance.getConfig().getWebDir().isEmpty()){
+            try {
+                File webDir = new File(BotLauncher.instance.getConfig().getWebDir(), "fldcppd.json");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(webDir));
+                FLDCApi api = new FLDCApi(getTeamPPD(), activeFolders, getTeamPPD()/activeFolders, distributionsDifference.size());
+                writer.write(GSON.toJson(api, FLDCApi.class));
+                writer.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

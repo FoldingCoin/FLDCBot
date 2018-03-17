@@ -36,8 +36,8 @@ public final class APIHandler {
 
             try (final BufferedWriter writer = new BufferedWriter(new FileWriter(webDir))) {
 
-                final int activeFolders = FLDCStats.activeFolders > 0 ? FLDCStats.activeFolders : 1;
-                final FLDCApi api = new FLDCApi(FLDCStats.getTeamPPD(), FLDCStats.activeFolders, (int) (FLDCStats.getTeamPPD() / activeFolders), FLDCStats.distributionsDifference.size(), CoinInfoHandler.getFLDC(), CoinInfoHandler.getBTC(), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getNextDistribution()), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getLastDistribution()), DistributionUtils.getDaysToNextDistribution());
+                final int activeFolders = FLDCStats.getActiveFolders() > 0 ? FLDCStats.getActiveFolders() : 1;
+                final FLDCApi api = new FLDCApi(FLDCStats.getTeamPPD(), FLDCStats.getActiveFolders(), FLDCStats.getTotalFolders(), FLDCStats.getTeamPPD() / activeFolders, CoinInfoHandler.getFLDC(), CoinInfoHandler.getBTC(), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getNextDistribution()), DateTimeFormatter.ofPattern("yyyy-MM-dd").format(DistributionUtils.getLastDistribution()), DistributionUtils.getDaysToNextDistribution());
                 writer.write(GSON.toJson(api, FLDCApi.class));
             }
 

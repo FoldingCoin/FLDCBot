@@ -1,12 +1,7 @@
 package net.foldingcoin.fldcbot;
 
-import java.awt.Color;
-import java.net.MalformedURLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.linkedin.urls.Url;
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
@@ -23,6 +18,7 @@ import net.foldingcoin.fldcbot.commands.CommandWhitelist;
 import net.foldingcoin.fldcbot.handler.api.APIHandler;
 import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
+import net.foldingcoin.fldcbot.handler.url.URLHandler;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -30,7 +26,6 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.EmbedBuilder;
 
 /**
  * The main bot instance, used to communicate with Discord and the various bot systems.
@@ -44,7 +39,6 @@ public class FLDCBot extends BotBase {
 
     private IRole roleAdmin;
     private IRole roleTeamFLDC;
-    private final List<String> urlPrefixes = Arrays.asList("http://", "https://", "www.", "www(dot)");
 
     public FLDCBot (String botName, Configuration config) {
 
@@ -118,49 +112,7 @@ public class FLDCBot extends BotBase {
     @EventSubscriber
     public void onMessageRecieved (MessageReceivedEvent event) {
 
-        // TODO remove this limit
-        if (!event.getChannel().getName().toLowerCase().equalsIgnoreCase("bot-testing")) {
-            return;
-        }
-        if (event.getMessage().getContent().startsWith(this.config.getCommandKey())) {
-            return;
-        }
-        if (event.getAuthor().getRolesForGuild(event.getGuild()).size()==1) {
-            final String content = event.getMessage().getContent().toLowerCase();
-            for (String s : content.split(" ")) {
-                Url url;
-                try {
-                     url = Url.create(s);
-                } catch(MalformedURLException e) {
-                    //do nothing, since it isn't a URL
-                    break;
-                }
-    
-                boolean isUrl = false;
-                for (final String s1 : this.getConfig().getUrlWhitelist()) {
-                    if(url.getHost().replaceAll("www.", "").startsWith(s1)) {
-                        isUrl = true;
-                    }
-                    if(isUrl){
-                        break;
-                    }
-                }
-                if (!isUrl) {
-                        event.getMessage().delete();
-                        event.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
-                        // Logging purposes
-                        final EmbedBuilder builder = new EmbedBuilder();
-                        builder.withTitle(" tried to send a link in: " + event.getChannel().getName());
-                        builder.withColor(Color.red);
-                        builder.withDesc("Message contents:\n\n" + content);
-                        builder.withTimestamp(event.getMessage().getTimestamp());
-                        builder.withThumbnail(event.getAuthor().getAvatarURL());
-                        builder.withAuthorName(event.getAuthor().getName());
-                        event.getGuild().getChannelsByName("bot-deleted-links").get(0).sendMessage(builder.build());
-                }
-
-            }
-        }
+        URLHandler.processMessage(event.getMessage());
     }
 
     public Configuration getConfig () {

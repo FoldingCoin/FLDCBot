@@ -6,15 +6,7 @@ import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.ManagerCommands;
 import net.darkhax.botbase.lib.ScheduledTimer;
 import net.darkhax.botbase.utils.MessageUtils;
-import net.foldingcoin.fldcbot.commands.CommandHelp;
-import net.foldingcoin.fldcbot.commands.CommandInfo;
-import net.foldingcoin.fldcbot.commands.CommandLookup;
-import net.foldingcoin.fldcbot.commands.CommandMarket;
-import net.foldingcoin.fldcbot.commands.CommandPPD;
-import net.foldingcoin.fldcbot.commands.CommandReload;
-import net.foldingcoin.fldcbot.commands.CommandUser;
-import net.foldingcoin.fldcbot.commands.CommandWallet;
-import net.foldingcoin.fldcbot.commands.CommandWhitelist;
+import net.foldingcoin.fldcbot.commands.*;
 import net.foldingcoin.fldcbot.handler.api.APIHandler;
 import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.handler.status.StatusHandler;
@@ -59,6 +51,8 @@ public class FLDCBot extends BotBase {
         handler.registerCommand("ppd", new CommandPPD("FLDC PPD", "The current FLDC PPD is: "));
         handler.registerCommand("urlwhitelist", new CommandWhitelist());
         handler.registerCommand("market", new CommandMarket());
+        handler.registerCommand("distribution", new CommandDistribution("next Distribution", "The next FLDC Distribution is: "));
+    
     }
 
     @Override

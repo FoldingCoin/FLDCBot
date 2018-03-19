@@ -13,6 +13,16 @@ import sx.blah.discord.util.EmbedBuilder;
 
 public final class URLHandler {
 
+    /**
+     * Utility classes, such as this one, are not meant to be instantiated. Java adds an
+     * implicit public constructor to every class which does not define at lease one
+     * explicitly. Hence why this constructor was added.
+     */
+    private URLHandler () {
+
+        throw new IllegalAccessError("Utility class");
+    }
+    
     public static void processMessage (IMessage message) {
 
         // TODO remove this limit

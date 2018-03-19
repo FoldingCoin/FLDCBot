@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.foldingcoin.fldcbot.BotLauncher;
-import net.foldingcoin.fldcbot.handler.coininfo.*;
+import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 

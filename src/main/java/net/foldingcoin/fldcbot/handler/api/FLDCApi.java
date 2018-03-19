@@ -30,11 +30,11 @@ public class FLDCApi {
     @Expose
     @SerializedName("BTCInfo")
     public final CoinInfo infoBTC;
-    
+
     @Expose
     @SerializedName("CUREInfo")
     public final CoinInfo infoCURE;
-    
+
     @Expose
     @SerializedName("nextDistribution")
     public final String nextDistribution;
@@ -45,8 +45,9 @@ public class FLDCApi {
     @Expose
     @SerializedName("daysToNextDistribution")
     public final long daysToNextDistribution;
-    
-    public FLDCApi(long teamPPD, int activeFolders, int totalFolders, double averagePPD, CoinInfo infoFLDC, CoinInfo infoBTC, CoinInfo infoCURE, String nextDistribution, String lastDistribution, long daysToNextDistribution) {
+
+    public FLDCApi (long teamPPD, int activeFolders, int totalFolders, double averagePPD, CoinInfo infoFLDC, CoinInfo infoBTC, CoinInfo infoCURE, String nextDistribution, String lastDistribution, long daysToNextDistribution) {
+
         this.teamPPD = teamPPD;
         this.activeFolders = activeFolders;
         this.totalFolders = totalFolders;
@@ -58,7 +59,7 @@ public class FLDCApi {
         this.lastDistribution = lastDistribution;
         this.daysToNextDistribution = daysToNextDistribution;
     }
-    
+
     public long getTeamPPD () {
 
         return this.teamPPD;
@@ -108,8 +109,9 @@ public class FLDCApi {
 
         return this.daysToNextDistribution;
     }
-    
-    public CoinInfo getInfoCURE() {
-        return infoCURE;
+
+    public CoinInfo getInfoCURE () {
+
+        return this.infoCURE;
     }
 }

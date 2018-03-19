@@ -9,6 +9,10 @@ import com.google.gson.GsonBuilder;
 
 import net.foldingcoin.fldcbot.BotLauncher;
 
+/**
+ * This handler pulls in live data from CoinMarketCap. It is updated every five minutes using
+ * the FLDCBot timer.
+ */
 public final class CoinInfoHandler {
 
     /**

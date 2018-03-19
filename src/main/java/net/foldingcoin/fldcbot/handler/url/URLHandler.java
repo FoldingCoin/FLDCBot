@@ -22,7 +22,7 @@ public final class URLHandler {
 
         throw new IllegalAccessError("Utility class");
     }
-    
+
     public static void processMessage (IMessage message) {
 
         // TODO remove this limit

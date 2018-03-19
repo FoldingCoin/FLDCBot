@@ -4,6 +4,10 @@ import net.foldingcoin.fldcbot.BotLauncher;
 import sx.blah.discord.handle.obj.ActivityType;
 import sx.blah.discord.handle.obj.StatusType;
 
+/**
+ * This class handles the display of the "now playing" text on the discord bot. It is updated
+ * every minute by the FLDCBot timer.
+ */
 public final class StatusHandler {
 
     /**
@@ -16,11 +20,17 @@ public final class StatusHandler {
         throw new IllegalAccessError("Utility class");
     }
 
+    /**
+     * The last message that was displayed.
+     */
     private static StatusMessage lastMessage = StatusMessage.last();
 
+    /**
+     * Updates the status message to show the next one.
+     */
     public static void updateStatusMessage () {
 
         lastMessage = lastMessage.next();
-        BotLauncher.instance.instance.changePresence(StatusType.ONLINE, ActivityType.PLAYING, lastMessage.statusSuplier.get());
+        BotLauncher.instance.instance.changePresence(StatusType.ONLINE, ActivityType.PLAYING, lastMessage.statusSupplier.get());
     }
 }

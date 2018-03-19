@@ -9,9 +9,7 @@ import ch.qos.logback.classic.Level;
 import sx.blah.discord.Discord4J;
 
 /**
- * This class contains the base code used to launch the Discord bot.
- *
- * @author Tyler Hancock (Darkhax)
+ * This class contains the base code used to launch the FLDC Discord bot.
  */
 public class BotLauncher {
 
@@ -30,6 +28,11 @@ public class BotLauncher {
      */
     public static FLDCBot instance;
 
+    /**
+     * This method is the starting point for the bot execution.
+     *
+     * @param args Arguments passed in from execution, currently none.
+     */
     public static void main (String... args) {
 
         try {

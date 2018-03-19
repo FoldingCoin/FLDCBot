@@ -23,5 +23,4 @@ public class CommandPPD extends CommandInfo {
         this.builder.withDesc(this.body + NumberFormat.getInstance().format(FLDCStats.getTeamPPD()));
         bot.sendMessage(channel, this.builder.build());
     }
-
 }

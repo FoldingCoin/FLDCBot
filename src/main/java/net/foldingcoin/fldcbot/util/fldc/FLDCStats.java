@@ -18,6 +18,9 @@ import com.google.gson.GsonBuilder;
 import net.foldingcoin.fldcbot.BotLauncher;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 
+/**
+ * Downloads data from the Foldingcoin.xyz api and aggregates it into a usable format.
+ */
 public final class FLDCStats {
 
     private static final Gson GSON = new GsonBuilder().create();

@@ -13,9 +13,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 /**
- * This class is responsible for the serialization of the user configuration file.
- *
- * @author Tyler Hancock (Darkhax)
+ * This class is responsible for the serialization of the configuration file.
  */
 public class Configuration {
 

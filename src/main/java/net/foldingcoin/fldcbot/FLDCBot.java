@@ -29,8 +29,6 @@ import sx.blah.discord.handle.obj.IUser;
 
 /**
  * The main bot instance, used to communicate with Discord and the various bot systems.
- *
- * @author Tyler Hancock (Darkhax)
  */
 public class FLDCBot extends BotBase {
 

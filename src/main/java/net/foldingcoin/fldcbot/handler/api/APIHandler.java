@@ -14,6 +14,10 @@ import net.foldingcoin.fldcbot.handler.coininfo.CoinInfoHandler;
 import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 
+/**
+ * This class is used to handle the web API that was requested by Theknystar. This class should
+ * be reconsidered, and potentially split into a second project.
+ */
 public final class APIHandler {
 
     /**

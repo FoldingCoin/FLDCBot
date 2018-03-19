@@ -6,6 +6,9 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
+/**
+ * This class provides a simple util to work with the distribution dates.
+ */
 public final class DistributionUtils {
 
     /**
@@ -18,31 +21,66 @@ public final class DistributionUtils {
         throw new IllegalAccessError("Utility class");
     }
 
+    /**
+     * Gets the amount of days until the next distribution.
+     *
+     * @return The amount of days until the next distributoon.
+     */
     public static long getDaysToNextDistribution () {
 
         return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution());
     }
 
+    /**
+     * Gets the date of the last distribution.
+     *
+     * @return The date of the last distribution.
+     */
     public static LocalDate getLastDistribution () {
 
         return getDistribution(LocalDate.now(), false);
     }
 
+    /**
+     * Gets the date of the last distribution from a specific date.
+     *
+     * @param currentDay The specific date to get the previous distribution.
+     * @return The last distribution before the passed date.
+     */
     public static LocalDate getLastDistribution (LocalDate currentDay) {
 
         return getDistribution(currentDay, false);
     }
 
+    /**
+     * Gets the date of the next distribution.
+     *
+     * @return The date of the next distribution.
+     */
     public static LocalDate getNextDistribution () {
 
         return getDistribution(LocalDate.now(), true);
     }
 
+    /**
+     * Gets the date of the next distribution after a specific date.
+     *
+     * @param currentDay The specific date to get the next distribution.
+     * @return The earliest upcomming distribution after the passed date.
+     */
     public static LocalDate getNextDistribution (LocalDate currentDay) {
 
         return getDistribution(currentDay, true);
     }
 
+    /**
+     * Gets a distribution relative to a point in time. Assumes that distributions happen on
+     * the first saturday of the month.
+     *
+     * @param currentDay The point in time to base this on.
+     * @param wantNext Whether or not you want the next distribution or the last one.
+     * @return The distribution relative to the passed point in time.
+     */
     public static LocalDate getDistribution (LocalDate currentDay, boolean wantNext) {
 
         // Gets the current year and month.
@@ -57,16 +95,14 @@ public final class DistributionUtils {
         if (wantNext) {
 
             // If this month's distribution has passed, return next months. Otherwise use
-            // this
-            // month's distribution date.
+            // this month's distribution date.
             return hasDistributionThisMonthPassed ? getFirstSaturday(currentMonth.plusMonths(1)) : distributionThisMonth;
         }
 
         else {
 
             // If this month's distribution has passed, it is the last distribution.
-            // Otherwise
-            // use the one for last month.
+            // Otherwise use the one for last month.
             return hasDistributionThisMonthPassed ? distributionThisMonth : getFirstSaturday(currentMonth.minusMonths(1));
         }
     }

@@ -25,12 +25,6 @@ public final class URLHandler {
 
     public static void processMessage (IMessage message) {
 
-        // TODO remove this limit
-        if (!message.getChannel().getName().toLowerCase().equalsIgnoreCase("bot-testing")) {
-
-            return;
-        }
-
         if (message.getAuthor().getRolesForGuild(message.getGuild()).size() == 1) {
 
             for (final Url url : getAllURLs(message.getContent())) {

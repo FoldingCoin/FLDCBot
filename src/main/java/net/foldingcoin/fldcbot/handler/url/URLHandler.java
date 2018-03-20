@@ -32,7 +32,7 @@ public final class URLHandler {
                 if (!isWhitelisted(url)) {
 
                     message.delete();
-                    message.getChannel().sendMessage("Sorry, only trusted users can send messages with links!");
+                    message.getAuthor().getOrCreatePMChannel().sendMessage("Sorry, only trusted users can send messages with links!");
 
                     // Logging purposes
                     final EmbedBuilder builder = new EmbedBuilder();

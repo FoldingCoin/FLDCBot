@@ -38,7 +38,7 @@ public final class URLHandler {
                     final EmbedBuilder builder = new EmbedBuilder();
                     builder.withTitle(" tried to send a link in: " + message.getChannel().getName());
                     builder.withColor(Color.red);
-                    builder.withDesc("Message contents:\n\n" + message.getContent());
+                    builder.withDesc("Message contents:\n\n" + message.getContent() + "\n\nTriggered word: " + url.getFullUrl());
                     builder.withTimestamp(message.getTimestamp());
                     builder.withThumbnail(message.getAuthor().getAvatarURL());
                     builder.withAuthorName(message.getAuthor().getName());
@@ -70,11 +70,19 @@ public final class URLHandler {
 
         // Splits the message into seperate words by splitting on whitespace
         for (final String word : message.toLowerCase().split("\\s+")) {
-
+        
             try {
-
+                //usernames are not urls
+                if(word.startsWith("<@") && word.endsWith(">")){
+                    continue;
+                }
+                //urls need to contain a dot
+                if(!word.contains(".")){
+                    continue;
+                }
                 // Attempt to get a URL from the word
                 final Url url = Url.create(word);
+                System.out.println(url.getOriginalUrl());
                 foundUrls.add(url);
             }
 

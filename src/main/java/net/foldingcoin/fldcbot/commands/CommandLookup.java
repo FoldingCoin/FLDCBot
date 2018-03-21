@@ -5,6 +5,7 @@ import java.util.List;
 import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.commands.Command;
 import net.darkhax.botbase.utils.MessageUtils;
+import net.foldingcoin.fldcbot.util.distribution.DistributionUtils;
 import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import net.foldingcoin.fldcbot.util.fldc.FLDCUser;
 import sx.blah.discord.handle.obj.IChannel;
@@ -37,7 +38,7 @@ public class CommandLookup implements Command {
                 embed.withTitle(fahUsername);
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
-                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.getNewPoints() * 7750000) + "", true);
+                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.getNewPoints() * (DistributionUtils.getDaysSinceLastDistribution()*250000)) + "", true);
                 embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
                 bot.sendMessage(channel, embed.build());
             }

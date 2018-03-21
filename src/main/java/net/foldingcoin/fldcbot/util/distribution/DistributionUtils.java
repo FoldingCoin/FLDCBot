@@ -30,6 +30,16 @@ public final class DistributionUtils {
 
         return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution());
     }
+    
+    /**
+     * Gets the amount of days since the last distribution.
+     *
+     * @return The amount of days since the last distributoon.
+     */
+    public static long getDaysSinceLastDistribution () {
+        
+        return ChronoUnit.DAYS.between(getLastDistribution(), LocalDate.now());
+    }
 
     /**
      * Gets the date of the last distribution.

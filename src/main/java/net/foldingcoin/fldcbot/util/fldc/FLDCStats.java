@@ -138,9 +138,17 @@ public final class FLDCStats {
 
             // Currently only users who are using all or fldc are tracked.
             if (user.getToken().equalsIgnoreCase("all") || user.getToken().equalsIgnoreCase("fldc")) {
-
+    
                 totalPoints += user.getNewCredit();
-                map.put(String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress()), user);
+                String key = String.format("%s_%s_%s", user.getName(), user.getToken(), user.getAddress());
+    
+                if(map.containsKey(key)) {
+                    final FLDCUser combined = new FLDCUser(user.getId(), user.getName(), user.getToken(), user.getAddress(), user.getNewCredit() + map.get(key).getNewCredit());
+                    map.put(key, combined);
+                } else {
+        
+                    map.put(key, user);
+                }
             }
         }
 

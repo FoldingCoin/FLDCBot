@@ -8,7 +8,7 @@ import java.util.Set;
 import com.linkedin.urls.Url;
 
 import net.foldingcoin.fldcbot.BotLauncher;
-import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 
 public final class URLHandler {
@@ -73,7 +73,7 @@ public final class URLHandler {
         
             try {
                 //usernames are not urls
-                if(word.startsWith("<@") && word.endsWith(">")){
+                if(word.startsWith("<@") && (word.endsWith(">") || word.endsWith("."))){
                     continue;
                 }
                 //urls need to contain a dot

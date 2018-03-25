@@ -24,7 +24,7 @@ public class CommandLookup implements Command {
         if (params.length >= 1) {
             final String key = params[0];
             final EmbedBuilder embed = new EmbedBuilder();
-            final List<FLDCUser> users = FLDCStats.getFutureUsers(key);
+            final List<FLDCUser> users = FLDCStats.getDifferenceUsers(key);
 
             if (users.isEmpty()) {
                 bot.sendMessage(channel, "No information found for: " + MessageUtils.quote(key) + "!");
@@ -38,7 +38,7 @@ public class CommandLookup implements Command {
                 embed.withTitle(fahUsername);
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
-                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) FLDCStats.getDifferenceUser(user.getAddress()).getNewCredit() / FLDCStats.getNewPoints() * (DistributionUtils.getDaysSinceLastDistribution()*250000)) + "", true);
+                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) (user.getNewCredit()+0f) / FLDCStats.getNewPoints() * (DistributionUtils.getDaysSinceLastDistribution()*250000)) + "", true);
                 embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
                 bot.sendMessage(channel, embed.build());
             }

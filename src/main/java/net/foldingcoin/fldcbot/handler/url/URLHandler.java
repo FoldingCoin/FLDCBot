@@ -32,7 +32,7 @@ public final class URLHandler {
                 if (!isWhitelisted(url)) {
 
                     message.delete();
-                    message.getAuthor().getOrCreatePMChannel().sendMessage("Sorry, only trusted users can send messages with links!");
+                    message.getAuthor().getOrCreatePMChannel().sendMessage("Sorry, only trusted users can send messages with links! The triggered word was: " + url.getFullUrl() + " if you believe that this was a mistake, please message the moderators.");
 
                     // Logging purposes
                     final EmbedBuilder builder = new EmbedBuilder();
@@ -82,7 +82,10 @@ public final class URLHandler {
                 }
                 // Attempt to get a URL from the word
                 final Url url = Url.create(word);
-                System.out.println(url.getOriginalUrl());
+                boolean matches = url.getHost().split("\\.")[url.getHost().split("\\.").length - 1].matches("(.)*(\\d)(.)*");
+                if(matches){
+                    continue;
+                }
                 foundUrls.add(url);
             }
 

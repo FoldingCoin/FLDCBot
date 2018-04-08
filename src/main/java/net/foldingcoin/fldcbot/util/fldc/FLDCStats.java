@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -70,9 +71,10 @@ public final class FLDCStats {
         final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Downloads the files
-        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now(ZoneId.of("America/Los_Angeles"))), FLDC_DIR, FILE_PREV_DISTRIBUTION);
-        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now(ZoneId.of("America/Los_Angeles")).minusDays(1)), FLDC_DIR, FILE_YESTERDAY_DISTRIBUTION);
-        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(DistributionUtils.getLastDistribution()), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
+        ZoneId zoneID = ZoneId.of("America/Los_Angeles");
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now(zoneID)), FLDC_DIR, FILE_PREV_DISTRIBUTION);
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(LocalDate.now(zoneID).minusDays(1)), FLDC_DIR, FILE_YESTERDAY_DISTRIBUTION);
+        BotLauncher.instance.downloadFile(BASE_URL + dateFormat.format(DistributionUtils.getFirstDay(YearMonth.of(LocalDate.now(zoneID).getYear(), LocalDate.now(zoneID).getMonth()))), FLDC_DIR, FILE_CURRENT_DISTRIBUTION);
 
         try (FileReader reader = new FileReader(new File(FLDC_DIR, FILE_YESTERDAY_DISTRIBUTION))) {
             distributionsYesterday = mapUsers(GSON.fromJson(reader, FLDCUser[].class));

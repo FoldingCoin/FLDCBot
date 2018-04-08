@@ -14,7 +14,7 @@ public enum StatusMessage {
 
     PRICE_FLDC( () -> String.format("FLDC: %.5f USD", Float.parseFloat(CoinInfoHandler.getFLDC().getPriceUsd()))),
     TEAM_POINTS( () -> "FLDC PPD: " + NumberFormat.getInstance().format(FLDCStats.getTeamPPD())),
-    DISTRIBUTION_TIMER( () -> String.format("Distrib in %d days", DistributionUtils.getDaysToNextDistribution()));
+    DISTRIBUTION_TIMER( () -> String.format("Distrib in %d days", DistributionUtils.getDaysToNextDistribution(true)));
 
     /**
      * A cached reference to the values. Prevents values array from being regenerated every

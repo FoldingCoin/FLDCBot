@@ -21,7 +21,7 @@ public class CommandDistribution extends CommandInfo {
     @Override
     public void processCommand (BotBase bot, IChannel channel, IMessage message, String[] params) {
 
-        this.builder.withDesc(this.body + DistributionUtils.getNextDistribution().format(DateTimeFormatter.ofPattern("yyy-MM-dd")));
+        this.builder.withDesc(this.body + DistributionUtils.getNextDistribution(true).format(DateTimeFormatter.ofPattern("yyy-MM-dd")));
         bot.sendMessage(channel, this.builder.build());
     }
 }

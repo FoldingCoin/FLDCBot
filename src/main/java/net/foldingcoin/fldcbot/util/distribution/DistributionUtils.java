@@ -21,6 +21,7 @@ public final class DistributionUtils {
         throw new IllegalAccessError("Utility class");
     }
 
+    
     /**
      * Gets the amount of days until the next distribution.
      *
@@ -28,7 +29,16 @@ public final class DistributionUtils {
      */
     public static long getDaysToNextDistribution () {
 
-        return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution());
+        return getDaysToNextDistribution(false);
+    }
+    /**
+     * Gets the amount of days until the next distribution.
+     *
+     * @return The amount of days until the next distributoon.
+     */
+    public static long getDaysToNextDistribution (boolean saturdayOffset) {
+        
+        return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution(saturdayOffset));
     }
     
     /**
@@ -71,6 +81,16 @@ public final class DistributionUtils {
 
         return getDistribution(LocalDate.now(), true);
     }
+    
+    /**
+     * Gets the date of the next distribution offset to the first saturday.
+     *
+     * @return The date of the next distribution.
+     */
+    public static LocalDate getNextDistribution (boolean offset) {
+        
+        return getDistribution(LocalDate.now(), true, offset);
+    }
 
     /**
      * Gets the date of the next distribution after a specific date.
@@ -82,6 +102,10 @@ public final class DistributionUtils {
 
         return getDistribution(currentDay, true);
     }
+    
+    public static LocalDate getDistribution(LocalDate currentDay, boolean wantNext){
+        return getDistribution(currentDay, wantNext, false);
+    }
 
     /**
      * Gets a distribution relative to a point in time. Assumes that distributions happen on
@@ -91,29 +115,29 @@ public final class DistributionUtils {
      * @param wantNext Whether or not you want the next distribution or the last one.
      * @return The distribution relative to the passed point in time.
      */
-    public static LocalDate getDistribution (LocalDate currentDay, boolean wantNext) {
+    public static LocalDate getDistribution (LocalDate currentDay, boolean wantNext, boolean saturdayOffset) {
 
         // Gets the current year and month.
         final YearMonth currentMonth = YearMonth.from(currentDay);
 
         // Gets the distribution date for this month.
-        final LocalDate distributionThisMonth = getFirstSaturday(currentMonth);
+        final LocalDate distributionThisMonth = getFirstDay(currentMonth);
 
         // Checks if the distribution this month has passed.
-        final boolean hasDistributionThisMonthPassed = currentDay.isAfter(distributionThisMonth);
+        final boolean hasDistributionThisMonthPassed = currentDay.isAfter(distributionThisMonth) || currentDay.isEqual(distributionThisMonth);
 
         if (wantNext) {
 
             // If this month's distribution has passed, return next months. Otherwise use
             // this month's distribution date.
-            return hasDistributionThisMonthPassed ? getFirstSaturday(currentMonth.plusMonths(1)) : distributionThisMonth;
+            return hasDistributionThisMonthPassed ? saturdayOffset ? getFirstSaturday(currentMonth.plusMonths(1)) : getFirstDay(currentMonth.plusMonths(1)) : distributionThisMonth;
         }
 
         else {
 
             // If this month's distribution has passed, it is the last distribution.
             // Otherwise use the one for last month.
-            return hasDistributionThisMonthPassed ? distributionThisMonth : getFirstSaturday(currentMonth.minusMonths(1));
+            return hasDistributionThisMonthPassed ? distributionThisMonth : saturdayOffset ? getFirstSaturday(currentMonth.minusMonths(1)) : getFirstDay(currentMonth.minusMonths(1));
         }
     }
 
@@ -124,5 +148,10 @@ public final class DistributionUtils {
 
         // Adjust to the first saturday of the month.
         return startingPoint.with(TemporalAdjusters.firstInMonth(DayOfWeek.SATURDAY));
+    }
+    
+    public static LocalDate getFirstDay (YearMonth month) {
+        // Start at the first day of month.
+        return month.atDay(1);
     }
 }

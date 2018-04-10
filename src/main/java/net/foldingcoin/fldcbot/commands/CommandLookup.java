@@ -1,5 +1,10 @@
 package net.foldingcoin.fldcbot.commands;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import net.darkhax.botbase.BotBase;
@@ -38,8 +43,13 @@ public class CommandLookup implements Command {
                 embed.withTitle(fahUsername);
                 embed.appendField("Team Rank", user.getId() + "", true);
                 embed.appendField("Token", user.getToken() + "", true);
-                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) (user.getNewCredit()+0f) / FLDCStats.getNewPoints() * (DistributionUtils.getDaysSinceLastDistribution()*250000)) + "", true);
+                embed.appendField("Unpaid FLDC", String.format("%.8f", (double) (user.getNewCredit()+0f) / FLDCStats.getNewPoints() * ((DistributionUtils.getDaysSinceLastDistribution()+1)*250000)) + "", true);
                 embed.appendField("Address", MessageUtils.makeHyperlink(user.getAddress(), "http://fah-web.stanford.edu/cgi-bin/main.py?qtype=userpage&username=" + fahUsername), false);
+//                http://foldingcoin.xyz/?token=FLDC&total=7750000&start=2018-03-01&end=2018-04-01
+    
+                final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                ZoneId zoneID = ZoneId.of("America/Los_Angeles");
+                embed.appendField("Stats", MessageUtils.makeHyperlink("Stats", String.format("http://foldingcoin.xyz/?token=FLDC&total=%s&start=%s&end=%s",((DistributionUtils.getDaysSinceLastDistribution()+1)*250000), dateFormat.format(DistributionUtils.getFirstDay(YearMonth.of(LocalDate.now(zoneID).getYear(), LocalDate.now(zoneID).getMonth()))), dateFormat.format(LocalDate.now(zoneID)))), false);
                 bot.sendMessage(channel, embed.build());
             }
         }

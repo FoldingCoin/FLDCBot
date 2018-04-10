@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 
 /**
  * This class provides a simple util to work with the distribution dates.
@@ -38,7 +39,7 @@ public final class DistributionUtils {
      */
     public static long getDaysToNextDistribution (boolean saturdayOffset) {
         
-        return ChronoUnit.DAYS.between(LocalDate.now(), getNextDistribution(saturdayOffset));
+        return ChronoUnit.DAYS.between(LocalDate.now(FLDCStats.ZONE_ID), getNextDistribution(saturdayOffset));
     }
     
     /**
@@ -48,7 +49,7 @@ public final class DistributionUtils {
      */
     public static long getDaysSinceLastDistribution () {
         
-        return ChronoUnit.DAYS.between(getLastDistribution(), LocalDate.now());
+        return ChronoUnit.DAYS.between(getLastDistribution(), LocalDate.now(FLDCStats.ZONE_ID));
     }
 
     /**
@@ -58,7 +59,7 @@ public final class DistributionUtils {
      */
     public static LocalDate getLastDistribution () {
 
-        return getDistribution(LocalDate.now(), false);
+        return getDistribution(LocalDate.now(FLDCStats.ZONE_ID), false);
     }
 
     /**
@@ -79,7 +80,7 @@ public final class DistributionUtils {
      */
     public static LocalDate getNextDistribution () {
 
-        return getDistribution(LocalDate.now(), true);
+        return getDistribution(LocalDate.now(FLDCStats.ZONE_ID), true);
     }
     
     /**
@@ -89,7 +90,7 @@ public final class DistributionUtils {
      */
     public static LocalDate getNextDistribution (boolean offset) {
         
-        return getDistribution(LocalDate.now(), true, offset);
+        return getDistribution(LocalDate.now(FLDCStats.ZONE_ID), true, offset);
     }
 
     /**

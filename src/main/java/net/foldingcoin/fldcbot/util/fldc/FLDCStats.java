@@ -129,6 +129,10 @@ public final class FLDCStats {
         
         final Map<String, FLDCUser> map = new HashMap<>();
         
+        if(users == null){
+            return map;
+        }
+        
         for (final FLDCUser user : users) {
             
             // Currently only users who are using all or fldc are tracked.

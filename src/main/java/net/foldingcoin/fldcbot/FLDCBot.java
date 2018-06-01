@@ -15,6 +15,7 @@ import net.foldingcoin.fldcbot.util.fldc.FLDCStats;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
@@ -29,6 +30,7 @@ public class FLDCBot extends BotBase {
 
     private IRole roleAdmin;
     private IRole roleTeamFLDC;
+    private IChannel channelDeletedLinks;
 
     public FLDCBot (String botName, Configuration config) {
 
@@ -70,6 +72,7 @@ public class FLDCBot extends BotBase {
         this.timer.scheduleRepeating(TimeUnit.SECONDS.toMillis(15), TimeUnit.MINUTES.toMillis(5), APIHandler::update);
 
         // Guild Specific init
+        this.channelDeletedLinks = instance.getChannelByID(424598112951337014L);
         this.roleAdmin = instance.getRoleByID(405483553904656386L);
         this.roleTeamFLDC = instance.getRoleByID(379170648208965633L);
     }
@@ -104,11 +107,16 @@ public class FLDCBot extends BotBase {
     @EventSubscriber
     public void onMessageRecieved (MessageReceivedEvent event) {
 
-        URLHandler.processMessage(event.getMessage());
+        URLHandler.processMessage(this, event.getMessage());
     }
 
     public Configuration getConfig () {
 
         return this.config;
+    }
+    
+    public IChannel getDeletedLinksChannel() {
+        
+        return this.channelDeletedLinks;
     }
 }

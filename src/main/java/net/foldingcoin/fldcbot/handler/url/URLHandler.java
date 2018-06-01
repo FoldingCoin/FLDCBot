@@ -7,7 +7,10 @@ import java.util.Set;
 
 import com.linkedin.urls.Url;
 
+import net.darkhax.botbase.BotBase;
+import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.BotLauncher;
+import net.foldingcoin.fldcbot.FLDCBot;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -23,7 +26,7 @@ public final class URLHandler {
         throw new IllegalAccessError("Utility class");
     }
 
-    public static void processMessage (IMessage message) {
+    public static void processMessage (FLDCBot bot, IMessage message) {
 
         if (message.getAuthor().getRolesForGuild(message.getGuild()).size() == 1) {
 
@@ -32,21 +35,33 @@ public final class URLHandler {
                 if (!isWhitelisted(url)) {
 
                     message.delete();
-                    message.getAuthor().getOrCreatePMChannel().sendMessage("Sorry, only trusted users can send messages with links! The triggered word was: " + url.getFullUrl() + " if you believe that this was a mistake, please message the moderators.");
+                    message.getAuthor().getOrCreatePMChannel().sendMessage("Sorry, only trusted users can send messages with links! The triggered word was: <" + url.getFullUrl() + "> if you believe that this was a mistake, please message the moderators.");
 
                     // Logging purposes
                     final EmbedBuilder builder = new EmbedBuilder();
-                    builder.withTitle(" tried to send a link in: " + message.getChannel().getName());
+                    builder.withTitle("Detected link in #" + message.getChannel().getName());
                     builder.withColor(Color.red);
-                    builder.withDesc("Message contents:\n\n" + message.getContent() + "\n\nTriggered word: " + url.getFullUrl());
+                    builder.appendField("Sender", MessageUtils.getPingMessage(message.getAuthor().getStringID()), false);
+                    builder.appendField("Message Contents", limitSize(message.getContent(), 1800), false);
+                    builder.appendField("Trigger", url.getFullUrl(), false);
                     builder.withTimestamp(message.getTimestamp());
                     builder.withThumbnail(message.getAuthor().getAvatarURL());
-                    builder.withAuthorName(message.getAuthor().getName());
-                    message.getGuild().getChannelsByName("bot-deleted-links").get(0).sendMessage(builder.build());
+                    BotLauncher.instance.sendMessage(bot.getDeletedLinksChannel(), builder.build());
                     break;
                 }
             }
         }
+    }
+    
+    private static String limitSize(String input, int maxLength) {
+        
+        if (input.length() > maxLength) {
+            
+            BotLauncher.LOG.info("Limited a link message containing more than {} chars. The full contents of the message are: {}", maxLength, input);
+            return input.substring(0, maxLength);
+        }
+        
+        return input;
     }
 
     public static boolean isWhitelisted (Url url) {

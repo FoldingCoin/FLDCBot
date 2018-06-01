@@ -27,7 +27,7 @@ public final class CoinInfoHandler {
 
     private static final Gson GSON = new GsonBuilder().create();
     private static final File DIR_INFO = new File(BotLauncher.DATA_DIR, "coin_info");
-    private static final String COIN_FILE_NAME = "%s_to_%s_%d.json";
+    private static final String COIN_FILE_NAME = "%s_to_%s_latest.json";
     private static final String URL_COIN_INFO = "https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s";
     private static final String ID_FLDC = "foldingcoin";
     private static final String ID_CURE = "curecoin";
@@ -75,12 +75,10 @@ public final class CoinInfoHandler {
         final String coinUrl = String.format(URL_COIN_INFO, coin, convert);
 
         // Get the name of the file to save to
-        final String fileName = String.format(COIN_FILE_NAME, coin, convert, System.currentTimeMillis());
-
-        final File saveDir = new File(DIR_INFO, coin);
+        final String fileName = String.format(COIN_FILE_NAME, coin, convert);
 
         // Downloads the json data and saves it to a file.
-        final File downloadFile = BotLauncher.instance.downloadFile(coinUrl, saveDir, fileName);
+        final File downloadFile = BotLauncher.instance.downloadFile(coinUrl, DIR_INFO, fileName);
 
         try (final FileReader reader = new FileReader(downloadFile)) {
 

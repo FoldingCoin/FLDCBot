@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.linkedin.urls.Url;
 
-import net.darkhax.botbase.BotBase;
 import net.darkhax.botbase.utils.MessageUtils;
 import net.foldingcoin.fldcbot.BotLauncher;
 import net.foldingcoin.fldcbot.FLDCBot;
@@ -42,7 +41,7 @@ public final class URLHandler {
                     builder.withTitle("Detected link in #" + message.getChannel().getName());
                     builder.withColor(Color.red);
                     builder.appendField("Sender", MessageUtils.getPingMessage(message.getAuthor().getStringID()), false);
-                    builder.appendField("Message Contents", limitSize(message.getContent(), 1800), false);
+                    builder.appendField("Message Contents", limitSize(message.getContent(), 800), false);
                     builder.appendField("Trigger", url.getFullUrl(), false);
                     builder.withTimestamp(message.getTimestamp());
                     builder.withThumbnail(message.getAuthor().getAvatarURL());
@@ -58,7 +57,7 @@ public final class URLHandler {
         if (input.length() > maxLength) {
             
             BotLauncher.LOG.info("Limited a link message containing more than {} chars. The full contents of the message are: {}", maxLength, input);
-            return input.substring(0, maxLength);
+            return input.substring(0, maxLength) + MessageUtils.SEPERATOR + MessageUtils.SEPERATOR + MessageUtils.makeBold("Truncated: " + (input.length() - maxLength));
         }
         
         return input;

@@ -11,16 +11,11 @@ repositories {
 	
 	    url 'https://maven.mcmoddev.com/'
 	}
-	
-	maven {
-	
-        url  'https://jitpack.io'
-    }
 }
 
 dependencies {
 
-    compile group: 'net.darkhax.discordbotbase', name: 'DiscordBotBase', version:'1.0.14'
+    compile group: 'net.darkhax.discordbotbase', name: 'DiscordBotBase', version:'1.0.15'
     compile group: 'com.opencsv', name: 'opencsv', version: '3.3'
     compile group: 'com.linkedin.urls', name: 'url-detector', version: '0.1.17'
 
